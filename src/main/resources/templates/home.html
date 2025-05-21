@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="header">
+  <div class="repo-name">GitHub-Savostov</div>
+  <div class="actions">
+    <a th:href="@{/repo/new}" class="button primary">New Repository</a>
+    <a th:href="@{/repositories}" class="button primary">List Repository</a>
+    <a href="#" class="button disabled">Create Organization</a>
+    <a href="/logout" class="button">Logout</a>
+  </div>
+</div>
+
+<div class="repo-list">
+  <div th:if="${repositories == null or repositories.isEmpty()}">
+    <p>У вас пока нет репозиториев.</p>
+  </div>
+
+  <div class="repo-card" th:each="repo : ${repositories}">
+    <a th:href="@{/repository/{id}(id=${repo.id})}" class="repo-link">
+      <div class="repo-name" th:text="${repo.name}"></div>
+    </a>
+    <div class="repo-description" th:text="${repo.description}"></div>
+    <div class="repo-actions">
+      <a href="#" class="button primary">Code</a>
+      <a href="#" class="button">Issues</a>
+      <a href="#" class="button">Pull requests</a>
+      <a href="#" class="button">Actions</a>
+      <a href="#" class="button">Projects</a>
+      <a href="#" class="button">Wiki</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

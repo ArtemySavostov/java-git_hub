@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Repo - [[${repo.name}]]</title>
+    <link rel="stylesheet" th:href="@{/css/repository.css}">
+</head>
+<body>
+<h1>Repository: <span th:text="${repo.name}"></span></h1>
+<p th:if="${repo.description != null}" th:text="${repo.description}"></p>
+<p>Owner ID: <span th:text="${repo.owner}"></span></p>
+<p>Created At: <span th:text="${#dates.format(repo.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+<p>Private: <span th:text="${repo.isPrivate ? 'Yes' : 'No'}"></span></p>
+
+<h2>Files:</h2>
+<ul>
+    <li th:each="file : ${files}">
+        <a th:href="@{/repository/{id}/file/{filePath}(id=${repo.id}, filePath=${file})}" th:text="${file}"></a>
+    </li>
+</ul>
+
+</body>
+</html>

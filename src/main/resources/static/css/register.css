@@ -1,0 +1,93 @@
+
+body {
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: #f6f8fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+h1 {
+    color: #24292e;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    width: 300px;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #586069;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    outline: none;
+    border-color: #0366d6;
+    box-shadow: 0 0 0 0.2rem rgba(3, 102, 214, 0.25);
+}
+
+
+
+button[type="submit"] {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+
+div.error {
+    color: #cb2431;
+    background-color: #ffeef0;
+    border: 1px solid #cb2431;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+
+p a {
+    color: #0366d6;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+p a:hover {
+    color: #22863a;
+}

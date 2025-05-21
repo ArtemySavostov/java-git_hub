@@ -1,0 +1,100 @@
+body {
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: #f6f8fa;
+}
+
+
+.button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 5px;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.button:hover {
+    background-color: #f2f6f9;
+}
+
+.button.primary {
+    background-color: #28a745;
+    color: #fff;
+    border-color: #28a745;
+}
+
+.button.primary:hover {
+    background-color: #218838;
+}
+
+.button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+.header {
+    background-color: #fff;
+    padding: 10px;
+    border-bottom: 1px solid #e1e4e8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.repo-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.repo-info {
+    color: #586069;
+    margin-top: 10px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.repo-list {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.repo-card {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.repo-card .repo-name {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.repo-card .repo-description {
+    color: #586069;
+    margin-bottom: 10px;
+}
+.repo-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.repo-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}

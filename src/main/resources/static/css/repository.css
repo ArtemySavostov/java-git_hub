@@ -1,0 +1,41 @@
+body {
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: #f6f8fa;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+h1 {
+    color: #24292e;
+    margin-bottom: 20px;
+}
+
+p {
+    margin-bottom: 10px;
+    color: #586069;
+}
+
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+
+li a {
+    color: #0366d6;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+li a:hover {
+    color: #22863a;
+}

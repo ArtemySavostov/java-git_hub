@@ -1,0 +1,89 @@
+body {
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: #f6f8fa;
+}
+.button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 5px;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.button:hover {
+    background-color: #f2f6f9;
+}
+
+.button.primary {
+    background-color: #28a745;
+    color: #fff;
+    border-color: #28a745;
+}
+
+.button.primary:hover {
+    background-color: #218838;
+}
+
+.button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+.header {
+    background-color: #fff;
+    padding: 10px;
+    border-bottom: 1px solid #e1e4e8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+th {
+    background-color: #f2f6f9;
+    font-weight: bold;
+    color: #333;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+
+td a {
+    color: #0366d6;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+td a:hover {
+    color: #22863a;
+}
+
+.no-repos {
+    color: #586069;
+    font-style: italic;
+}

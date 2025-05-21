@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create New Repository</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+  <h1>Create a New Repository</h1>
+  <form th:action="@{/repo/create}" th:object="${repo}" method="post">
+    <div class="form-group">
+      <label for="name">Repository Name:</label>
+      <input type="text" id="name" th:field="*{name}" class="form-control" required="required"/>
+    </div>
+    <button type="submit" class="button primary">Create Repository</button>
+    <a th:href="@{/}" class="button">Cancel</a>
+  </form>
+</div>
+</body>
+</html>

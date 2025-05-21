@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список репозиториев</title>
+    <link rel="stylesheet" th:href="@{/css/repositories_list.css}">
+</head>
+<body>
+<div class="header">
+    <div class="repo-name">GitHub-Savostov</div>
+    <div class="actions">
+        <a th:href="@{/repo/home}" class="button primary">Back to home</a>
+        <a href="/login" class="button">Sign in</a>
+    </div>
+</div>
+
+
+<div th:if="${repositories == null or repositories.isEmpty()}">
+    <p>Нет доступных репозиториев.</p>
+</div>
+
+<div th:unless="${repositories == null or repositories.isEmpty()}">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Owner</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="repo : ${repositories}">
+            <td th:text="${repo.id}"></td>
+            <td>
+                <a th:href="@{/repository/{id}(id=${repo.id})}" th:text="${repo.name}"></a>
+            </td>
+            <td th:text="${repo.owner.username}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

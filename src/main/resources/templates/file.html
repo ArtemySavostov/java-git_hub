@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>File - [[${filePath}]]</title>
+    <link rel="stylesheet" th:href="@{/css/file.css}">
+</head>
+<body>
+<h1>File: <span th:text="${filePath}"></span></h1>
+<p>Repository: <a th:href="@{/repository/{id}(id=${repo.id})}" th:text="${repo.name}"></a></p>
+<pre th:utext="${content}"></pre>
+</body>
+</html>
