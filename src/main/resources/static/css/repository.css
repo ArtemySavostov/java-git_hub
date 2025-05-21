@@ -19,7 +19,6 @@ p {
     color: #586069;
 }
 
-
 ul {
     list-style: none;
     padding: 0;
@@ -29,7 +28,6 @@ li {
     margin-bottom: 5px;
 }
 
-
 li a {
     color: #0366d6;
     text-decoration: none;
@@ -38,4 +36,36 @@ li a {
 
 li a:hover {
     color: #22863a;
+}
+
+/* Styles for the header */
+.header {
+    display: flex;
+    justify-content: space-between; /* Distribute space evenly */
+    align-items: center; /* Align items vertically in the center */
+    width: 100%; /* Take up the full width */
+    margin-bottom: 20px; /* Add some spacing below the header */
+}
+
+.header-left {
+    text-align: left; /* Align content to the left */
+}
+
+.header-right {
+    text-align: right; /* Align content to the right */
+}
+
+/* Style the upload button */
+.header-right button {
+    background-color: #28a745; /* Green color */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.header-right button:hover {
+    background-color: #218838;
 }

@@ -3,11 +3,32 @@
 <head>
     <title>Repo - [[${repo.name}]]</title>
     <link rel="stylesheet" th:href="@{/css/repository.css}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadForm = document.getElementById('uploadForm');
+            const fileInput = document.getElementById('fileInput');
+
+            fileInput.addEventListener('change', function() {
+                uploadForm.submit(); // Automatically submit the form on file selection
+            });
+        });
+    </script>
 </head>
 <body>
-<h1>Repository: <span th:text="${repo.name}"></span></h1>
+<div class="header">
+    <div class="header-left">
+        <h1>Repository: <span th:text="${repo.name}"></span></h1>
+    </div>
+    <div class="header-right">
+        <form id="uploadForm" method="POST" enctype="multipart/form-data" th:action="@{/repository/{id}/upload(id=${repo.id})}">
+            <input type="file" name="files" id="fileInput" multiple style="display: none;" />
+            <button type="button" onclick="document.getElementById('fileInput').click()">Upload Files</button>
+        </form>
+    </div>
+</div>
+
 <p th:if="${repo.description != null}" th:text="${repo.description}"></p>
-<p>Owner ID: <span th:text="${repo.owner}"></span></p>
+<!--<p>Owner ID: <span th:text="${repo.owner}"></span></p>-->
 <p>Created At: <span th:text="${#dates.format(repo.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
 <p>Private: <span th:text="${repo.isPrivate ? 'Yes' : 'No'}"></span></p>
 

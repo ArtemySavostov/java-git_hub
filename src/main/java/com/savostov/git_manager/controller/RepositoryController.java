@@ -3,17 +3,25 @@ package com.savostov.git_manager.controller;
 import com.savostov.git_manager.model.Repo;
 import com.savostov.git_manager.repository.RepositoryRepository;
 import com.savostov.git_manager.service.GitService;
+import com.savostov.git_manager.service.RepositoryService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -23,6 +31,12 @@ public class RepositoryController {
 
     @Autowired
     private RepositoryRepository repositoryRepository;
+
+    @Autowired
+    private RepositoryService repositoryService;
+
+    @Value("${repositories.path}")
+    private String repositoriesPath;
 
 
     @GetMapping("/repository/{id}")
@@ -62,5 +76,15 @@ public class RepositoryController {
         return path.substring(prefix.length());
     }
 
+    @PostMapping("/repository/{id}/upload")
+    public String loadFiles(@PathVariable Long id, @RequestParam("files") MultipartFile[] files, Model model) throws IOException, InterruptedException {
+        Repo repo = repositoryRepository.getReferenceById(id);
+        String commitMessage = "Added new files";
+        repositoryService.uplodFiles(id, files);
+        gitService.addFiles(repo.getPath());
+        gitService.commitFiles(repo.getPath(), commitMessage);
+        return "redirect:/repository/" + id;
+
+    }
 
 }

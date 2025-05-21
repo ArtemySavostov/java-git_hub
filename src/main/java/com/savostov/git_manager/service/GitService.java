@@ -46,4 +46,16 @@ public class GitService {
         return content.toString();
     }
 
+    public void addFiles(String repositoryPath) throws IOException, InterruptedException {
+        ProcessBuilder processBuilder = new ProcessBuilder(gitCommand, "add", ".");
+        processBuilder.directory(new File(repositoryPath));
+        Process process = processBuilder.start();
+        process.waitFor();
+    }
+    public void commitFiles(String repositoryPath, String commitMessage) throws IOException, InterruptedException {
+        ProcessBuilder processBuilder = new ProcessBuilder(gitCommand, "commit", "-m", "\"" + commitMessage + "\"");
+        processBuilder.directory(new File(repositoryPath));
+        Process process = processBuilder.start();
+        process.waitFor();
+    }
 }

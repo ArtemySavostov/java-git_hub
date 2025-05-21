@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import com.savostov.git_manager.model.Repo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,6 +33,8 @@ public class RepositoryService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private GitService gitService;
 
     @Transactional
     public Repo createRepository(User owner, String repositoryName, boolean isPrivate) {
@@ -125,5 +128,20 @@ public class RepositoryService {
     public Optional<Repo> getRepositoryByName(String repositoryName) {
         Optional<Repo> repository = repositoryRepository.getRepositoryByName(repositoryName);
         return repository;
+    }
+
+    public void uplodFiles(Long id, MultipartFile[] files) throws IOException {
+        Repo repo = repositoryRepository.getReferenceById(id);
+        Path repoPath = Paths.get(repo.getPath());
+        if (!Files.exists(repoPath)) {
+            Files.createDirectories(repoPath);
+        }
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                Path filePath = repoPath.resolve(file.getOriginalFilename());
+                Files.copy(file.getInputStream(), filePath);
+                System.out.println("Uploaded " + filePath.toString());
+            }
+        }
     }
 }
