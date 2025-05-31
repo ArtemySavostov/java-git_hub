@@ -1,0 +1,16 @@
+<div class="user-menu-dropdown shadow" id="userMenuDropdown" style="display:none; position:absolute; right:1rem; top:3.5rem; z-index:1050;">
+    <div class="p-3 border-bottom text-center">
+        <img src="https://github.com/identicons/user.png" class="avatar-user-list mb-2" style="width:48px; height:48px;">
+        <div class="font-weight-bold" th:text="${user.username}">Username</div>
+    </div>
+    <a class="dropdown-item" th:href="@{/user/{id}(id=${user.id})}">
+        <i class="fas fa-user mr-2"></i> Your profile
+    </a>
+    <a class="dropdown-item" th:href="@{/home}">
+        <i class="fas fa-book mr-2"></i> Your repositories
+    </a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item text-danger" th:href="@{/logout}">
+        <i class="fas fa-sign-out-alt mr-2"></i> Sign out
+    </a>
+</div> 

@@ -1,0 +1,525 @@
+/* Общие стили */
+:root {
+    --navbar-bg: #24292e;
+    --navbar-color: #ffffff;
+    --border-color: #e1e4e8;
+    --link-color: #0366d6;
+    --text-muted: #6a737d;
+    --bg-gray: #f6f8fa;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffd33d;
+}
+
+/* Общие стили */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #24292e;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* Навигация */
+.navbar {
+    background-color: var(--navbar-bg);
+    padding: 0.5rem 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,0.8);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ffffff;
+}
+
+.avatar-small {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+/* Контент */
+.content-wrapper {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+/* Карточки */
+.repo-card {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+    transition: transform 0.2s ease;
+}
+
+.repo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.repo-card h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.repo-card p {
+    color: var(--text-muted);
+    margin: 0.5rem 0;
+}
+
+.repo-stats {
+    display: flex;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Кнопки */
+.btn-primary {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-outline-dark {
+    color: var(--navbar-bg);
+    border-color: var(--border-color);
+}
+
+/* Теги */
+.tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 2em;
+    background-color: var(--bg-gray);
+    color: var(--text-muted);
+    margin-right: 0.5rem;
+}
+
+/* Футер */
+.footer {
+    background-color: #ffffff;
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 0;
+    margin-top: auto;
+}
+
+.footer a {
+    color: var(--text-muted);
+}
+
+.footer a:hover {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+/* Хлебные крошки */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+}
+
+/* Вкладки */
+.nav-tabs {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    padding: 0.5rem 1rem;
+    margin-bottom: -1px;
+}
+
+.nav-tabs .nav-link:hover {
+    border-bottom-color: var(--border-color);
+    color: var(--navbar-bg);
+}
+
+.nav-tabs .nav-link.active {
+    border-bottom-color: var(--link-color);
+    color: var(--navbar-bg);
+}
+
+/* Таблицы */
+.table {
+    margin-bottom: 0;
+}
+
+.table td, .table th {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.table thead th {
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-gray);
+    font-weight: 600;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 1rem 0;
+    }
+
+    .repo-stats {
+        flex-wrap: wrap;
+    }
+
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Компоненты из существующего проекта */
+.file-tree-panel {
+    width: 300px;
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    background-color: #ffffff;
+    min-width: 250px;
+    resize: horizontal;
+    max-width: 50vw;
+}
+
+.file-content-panel {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #ffffff;
+}
+
+.file-header {
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-gray);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Дополнительные компоненты */
+.commit-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.commit-item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.commit-message {
+    flex: 1;
+}
+
+.commit-meta {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.branch-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    background-color: #e1e4e8;
+    border-radius: 2em;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-right: 0.5rem;
+}
+
+.branch-tag i {
+    margin-right: 0.5rem;
+}
+
+/* Модальные окна */
+.modal-content {
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(149,157,165,0.2);
+}
+
+.modal-header {
+    background-color: var(--bg-gray);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Подсказки */
+.tooltip {
+    font-size: 0.875rem;
+}
+
+/* Состояния загрузки */
+.loading-spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--link-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Компоненты навигации */
+.notifications-dropdown {
+    width: 300px;
+    padding: 0;
+}
+
+.notification-item {
+    display: flex;
+    align-items: start;
+    padding: 0.5rem 0;
+}
+
+.notification-text {
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.dropdown-header {
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+}
+
+.badge-pill {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.nav-link {
+    position: relative;
+}
+
+/* Карточки */
+.create-card, .project-card, .team-card, .repo-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.create-card:hover, .project-card:hover, .team-card:hover, .repo-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Аватары и изображения */
+.avatar-stack {
+    display: flex;
+    align-items: center;
+}
+
+.avatar-xsmall {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin-left: -8px;
+}
+
+.avatar-xsmall:first-child {
+    margin-left: 0;
+}
+
+.avatar-more {
+    background-color: #eee;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-left: 4px;
+}
+
+.team-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+}
+
+.team-avatar-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+}
+
+.avatar-xlarge {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+/* Проекты */
+.progress {
+    background-color: #eee;
+    border-radius: 3px;
+    height: 6px;
+}
+
+.progress-bar {
+    border-radius: 3px;
+}
+
+/* Команды */
+.team-stats {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Pull Request */
+.commit-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.commit-item {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.commit-item:last-child {
+    border-bottom: none;
+}
+
+.commit-hash {
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+/* Приглашения */
+.invitation-message {
+    border-left: 4px solid #28a745;
+    padding-left: 1rem;
+}
+
+/* Настройки */
+.settings-sidebar {
+    position: sticky;
+    top: 1rem;
+}
+
+.settings-sidebar .list-group-item {
+    border-radius: 0;
+    border-right: none;
+    border-left: 3px solid transparent;
+    padding: 0.75rem 1rem;
+}
+
+.settings-sidebar .list-group-item.active {
+    background-color: #f8f9fa;
+    color: var(--link-color);
+    border-left-color: var(--link-color);
+    font-weight: 600;
+}
+
+.settings-sidebar .list-group-item:hover:not(.active) {
+    background-color: #f8f9fa;
+    color: var(--link-color);
+}
+
+/* Профиль */
+.profile-sidebar {
+    position: sticky;
+    top: 1rem;
+}
+
+.profile-stats a {
+    text-decoration: none;
+}
+
+.profile-stats a:hover {
+    color: var(--link-color) !important;
+}
+
+.achievement-badges {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.achievement-badge {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .profile-sidebar,
+    .settings-sidebar {
+        margin-bottom: 2rem;
+        position: static;
+    }
+    
+    .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Анимации */
+.create-card .fa-3x,
+.project-card .fa-3x,
+.team-card .fa-3x {
+    transition: transform 0.2s ease;
+}
+
+.create-card:hover .fa-3x,
+.project-card:hover .fa-3x,
+.team-card:hover .fa-3x {
+    transform: scale(1.1);
+}
+
+/* Утилиты */
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.border-color {
+    border-color: var(--border-color) !important;
+}
+
+.link-color {
+    color: var(--link-color) !important;
+} 

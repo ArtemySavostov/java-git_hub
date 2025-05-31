@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repositories - Git Manager</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-light">
+    <!-- Навигация из layout.html -->
+
+    <!-- Основной контент -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Заголовок страницы -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">Repositories</h1>
+                    <p class="text-muted">Manage and organize your Git repositories</p>
+                </div>
+                <div>
+                    <button class="btn btn-success" data-toggle="modal" data-target="#newRepoModal">
+                        <i class="fas fa-plus mr-2"></i>New Repository
+                    </button>
+                </div>
+            </div>
+
+            <!-- Фильтры и поиск -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Search repositories...">
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-md-end">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-secondary">
+                                    <i class="fas fa-filter mr-2"></i>Filter
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary">
+                                    <i class="fas fa-sort mr-2"></i>Sort
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Список репозиториев -->
+            <div class="repo-list">
+                <!-- Репозиторий 1 -->
+                <div class="repo-card fade-in">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3>
+                                <a href="repository.html">git-manager</a>
+                                <span class="tag ml-2">Public</span>
+                            </h3>
+                            <p class="mt-2">Modern Git repository manager with beautiful UI and great features</p>
+                            <div class="repo-stats">
+                                <span>
+                                    <i class="fas fa-code-branch mr-1"></i>
+                                    master
+                                </span>
+                                <span>
+                                    <i class="fas fa-star mr-1"></i>
+                                    128
+                                </span>
+                                <span>
+                                    <i class="fas fa-code-branch mr-1"></i>
+                                    24
+                                </span>
+                                <span>
+                                    <i class="far fa-clock mr-1"></i>
+                                    Updated 2 hours ago
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-link text-muted" data-toggle="dropdown">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-edit mr-2"></i>Edit
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-clone mr-2"></i>Clone
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="#">
+                                    <i class="fas fa-trash-alt mr-2"></i>Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Репозиторий 2 -->
+                <div class="repo-card fade-in">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3>
+                                <a href="#">spring-boot-app</a>
+                                <span class="tag ml-2">Private</span>
+                            </h3>
+                            <p class="mt-2">Spring Boot application with modern architecture and best practices</p>
+                            <div class="repo-stats">
+                                <span>
+                                    <i class="fas fa-code-branch mr-1"></i>
+                                    develop
+                                </span>
+                                <span>
+                                    <i class="fas fa-star mr-1"></i>
+                                    45
+                                </span>
+                                <span>
+                                    <i class="fas fa-code-branch mr-1"></i>
+                                    12
+                                </span>
+                                <span>
+                                    <i class="far fa-clock mr-1"></i>
+                                    Updated yesterday
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-link text-muted" data-toggle="dropdown">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-edit mr-2"></i>Edit
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-clone mr-2"></i>Clone
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="#">
+                                    <i class="fas fa-trash-alt mr-2"></i>Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания репозитория -->
+    <div class="modal fade" id="newRepoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create a new repository</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Repository name</label>
+                            <input type="text" class="form-control" placeholder="my-awesome-project">
+                            <small class="form-text text-muted">
+                                Great repository names are short and memorable.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label>Description (optional)</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Visibility</label>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="public" name="visibility" class="custom-control-input" checked>
+                                <label class="custom-control-label" for="public">
+                                    <i class="fas fa-globe-americas mr-2"></i>Public
+                                </label>
+                            </div>
+                            <div class="custom-control custom-radio mt-2">
+                                <input type="radio" id="private" name="visibility" class="custom-control-input">
+                                <label class="custom-control-label" for="private">
+                                    <i class="fas fa-lock mr-2"></i>Private
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="readme">
+                                <label class="custom-control-label" for="readme">
+                                    Initialize this repository with a README
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success">
+                        <i class="fas fa-plus mr-2"></i>Create repository
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер из layout.html -->
+
+    <!-- Скрипты -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

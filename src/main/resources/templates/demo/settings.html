@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Git Manager</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-light">
+    <!-- Навигация из layout.html -->
+
+    <!-- Основной контент -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Боковое меню настроек -->
+                <div class="col-md-3">
+                    <div class="settings-sidebar">
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-user mr-2"></i>Profile
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-shield-alt mr-2"></i>Security
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-bell mr-2"></i>Notifications
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-code mr-2"></i>Repositories
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-users mr-2"></i>Organizations
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-key mr-2"></i>SSH and GPG keys
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-code-branch mr-2"></i>Git settings
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action text-danger">
+                                <i class="fas fa-trash-alt mr-2"></i>Delete account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Основное содержимое настроек -->
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="h4 mb-4">Public Profile</h2>
+                            
+                            <!-- Форма профиля -->
+                            <form>
+                                <!-- Аватар -->
+                                <div class="form-group">
+                                    <label>Profile picture</label>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://github.com/identicons/user.png" class="avatar-large mr-3" alt="Profile">
+                                        <div>
+                                            <button type="button" class="btn btn-outline-secondary">
+                                                Upload new picture
+                                            </button>
+                                            <small class="d-block text-muted mt-2">
+                                                PNG, JPG or GIF. Maximum file size 1MB.
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <!-- Основная информация -->
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" value="John Doe">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Public email</label>
+                                    <select class="form-control">
+                                        <option>john.doe@example.com</option>
+                                        <option>johndoe@company.com</option>
+                                        <option>Don't show my email address</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Bio</label>
+                                    <textarea class="form-control" rows="3" placeholder="Tell us a little bit about yourself"></textarea>
+                                    <small class="form-text text-muted">
+                                        You can @mention other users and organizations
+                                    </small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Company</label>
+                                    <input type="text" class="form-control" placeholder="Where do you work?">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <input type="text" class="form-control" placeholder="Where are you based?">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Website</label>
+                                    <input type="url" class="form-control" placeholder="Blog or website URL">
+                                </div>
+
+                                <hr>
+
+                                <!-- Настройки профиля -->
+                                <h3 class="h5 mb-3">Profile settings</h3>
+
+                                <div class="custom-control custom-checkbox mb-2">
+                                    <input type="checkbox" class="custom-control-input" id="makeProfilePrivate">
+                                    <label class="custom-control-label" for="makeProfilePrivate">
+                                        Make profile private
+                                    </label>
+                                    <small class="form-text text-muted">
+                                        Hide your activity overview and timeline from your profile
+                                    </small>
+                                </div>
+
+                                <div class="custom-control custom-checkbox mb-2">
+                                    <input type="checkbox" class="custom-control-input" id="showContributions" checked>
+                                    <label class="custom-control-label" for="showContributions">
+                                        Show contribution graph on your profile
+                                    </label>
+                                </div>
+
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="enableDiscussions" checked>
+                                    <label class="custom-control-label" for="enableDiscussions">
+                                        Enable discussions on your profile
+                                    </label>
+                                </div>
+
+                                <hr>
+
+                                <!-- Кнопки действий -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button type="submit" class="btn btn-success">
+                                        Update profile
+                                    </button>
+                                    <button type="reset" class="btn btn-outline-secondary">
+                                        Reset changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер из layout.html -->
+
+    <!-- Скрипты -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Дополнительные стили для настроек */
+        .settings-sidebar {
+            position: sticky;
+            top: 1rem;
+        }
+
+        .settings-sidebar .list-group-item {
+            border-radius: 0;
+            border-right: none;
+            border-left: 3px solid transparent;
+            padding: 0.75rem 1rem;
+        }
+
+        .settings-sidebar .list-group-item.active {
+            background-color: #f8f9fa;
+            color: var(--link-color);
+            border-left-color: var(--link-color);
+            font-weight: 600;
+        }
+
+        .settings-sidebar .list-group-item:hover:not(.active) {
+            background-color: #f8f9fa;
+            color: var(--link-color);
+        }
+
+        .avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        .form-group label {
+            font-weight: 600;
+        }
+
+        hr {
+            margin: 2rem 0;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .settings-sidebar {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</body>
+</html> 

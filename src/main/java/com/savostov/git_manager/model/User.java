@@ -4,13 +4,18 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 
+
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 @Data
 public class User {
-    public User (){
+    public User() {
 
     }
+
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +26,15 @@ public class User {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-
+    @ManyToMany
+    @JoinTable(
+            name = "user_subscription",
+            joinColumns = @JoinColumn(name = "subscriber_id"),
+            inverseJoinColumns = @JoinColumn(name = "subscriber_to_id")
+    )
+    private Set<User> subscriptions = new HashSet<>();
+    @ManyToMany(mappedBy = "subscriptions")
+    private Set<User> subscribers = new HashSet<>();
     @Column(name = "role")
     private String role;
 //    @Column(nullable = false)

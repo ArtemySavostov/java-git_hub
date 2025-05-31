@@ -1,27 +1,147 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Users List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - Git Manager</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
 </head>
-<body>
-<h1>Users List</h1>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${users}">
-        <td th:text="${user.id}"></td>
-        <td th:text="${user.username}"></td>
+<body class="bg-light">
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fab fa-github mr-2"></i>
+                Git Manager
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i>
+                            <span th:text="${#authentication?.name}">Username</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#" onclick="return false;">
+                                <i class="far fa-user mr-2"></i> Your Profile
+                            </a>
+                            <a class="dropdown-item" href="#" onclick="return false;">
+                                <i class="fas fa-cog mr-2"></i> Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    </tr>
-    </tbody>
-</table>
+    <!-- Основной контент -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Заголовок и поиск -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Users</h2>
+                <div class="search-filters">
+                    <input type="text" class="form-control" placeholder="Search users...">
+                </div>
+            </div>
 
+            <!-- Список пользователей -->
+            <div class="row justify-content-start">
+                <div th:each="user : ${users}" class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card user-card text-center">
+                        <div class="card-body">
+                            <img src="https://github.com/identicons/user.png" class="avatar-user-list mb-2" th:alt="${user.username}">
+                            <h5 class="card-title mb-1">
+                                <a th:href="@{/user/{id}(id=${user.id})}" class="text-dark">
+                                    <span th:text="${user.username}">username</span>
+                                </a>
+                            </h5>
+                            <p class="text-muted small">@<span th:text="${user.username}">username</span></p>
+                            <div class="text-center">
+                                <a th:href="@{/user/{id}(id=${user.id})}" class="btn btn-outline-primary btn-sm mt-2">
+                                    <i class="fas fa-user mr-1"></i> View Profile
+                                </a>
+                                <th:block th:if="${user.id} != ${currentUserId}">
+                                    <button 
+                                        th:if="${!followingUsers.contains(user.id)}"
+                                        class="btn btn-outline-success btn-sm mt-2 follow-btn"
+                                        th:data-subscriber-id="${currentUserId}" 
+                                        th:data-subscribedto-id="${user.id}">
+                                        <i class="fas fa-user-plus mr-1"></i> Follow
+                                    </button>
+                                    <button 
+                                        th:if="${followingUsers.contains(user.id)}"
+                                        class="btn btn-success btn-sm mt-2" disabled>
+                                        <i class="fas fa-user-check mr-1"></i> Following
+                                    </button>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Сообщение об отсутствии пользователей -->
+            <div th:if="${#lists.isEmpty(users)}" class="alert alert-info">
+                <i class="fas fa-info-circle mr-2"></i>
+                Нет доступных пользователей.
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted">© 2025 Git Manager</div>
+                <div>
+                    <a href="#" class="mr-3">Terms</a>
+                    <a href="#" class="mr-3">Privacy</a>
+                    <a href="#" class="mr-3">Help</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.follow-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const subscriberId = btn.getAttribute('data-subscriber-id');
+                const subscribedToId = btn.getAttribute('data-subscribedto-id');
+                fetch(`/${subscriberId}/subscribe/${subscribedToId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    btn.textContent = 'Following';
+                    btn.classList.remove('btn-outline-success');
+                    btn.classList.add('btn-success');
+                    btn.disabled = true;
+                })
+                .catch(() => {
+                    alert('Ошибка при подписке');
+                });
+            });
+        });
+    });
+    </script>
 </body>
 </html>

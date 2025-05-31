@@ -2,42 +2,727 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Repo - [[${repo.name}]]</title>
-    <link rel="stylesheet" th:href="@{/css/repository.css}">
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const uploadForm = document.getElementById('uploadForm');
-            const fileInput = document.getElementById('fileInput');
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prismjs/1.24.1/themes/prism.min.css">
+</head>
+<body class="bg-light">
+    <!-- Навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-code-branch mr-2"></i>
+                <span th:text="${repo.name}"></span>
+            </a>
+            <div class="ml-auto d-flex align-items-center">
+                <!-- Статус приватности -->
+                <div class="repo-visibility mr-3" th:if="${repo.private}">
+                    <i class="fas fa-lock text-light"></i>
+                    <span class="text-light ml-1">Private</span>
+                </div>
+                <div class="repo-visibility mr-3" th:unless="${repo.private}">
+                    <i class="fas fa-globe-americas text-light"></i>
+                    <span class="text-light ml-1">Public</span>
+                </div>
+                <!-- Кнопка загрузки -->
+                <input type="file" id="directoryInput" webkitdirectory directory multiple style="display: none;" />
+                <button id="uploadButton" class="btn btn-outline-light" onclick="document.getElementById('directoryInput').click()">
+                    <i class="fas fa-upload mr-2"></i>Upload Directory
+                </button>
+            </div>
+        </div>
+    </nav>
 
-            fileInput.addEventListener('change', function() {
-                uploadForm.submit(); // Automatically submit the form on file selection
+    <!-- Индикатор прогресса -->
+    <div id="uploadProgress" class="progress upload-progress" style="display: none;">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"></div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="main-container">
+        <!-- Левая панель с деревом файлов -->
+        <div class="file-tree-panel">
+            <div id="fileTree"></div>
+        </div>
+
+        <!-- Правая панель с содержимым файла -->
+        <div class="file-content-panel">
+            <div id="fileContentView" class="file-content-wrapper">
+                <div class="empty-state">
+                    <i class="fas fa-code fa-3x mb-3"></i>
+                    <p>Select a file to view its contents</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для ошибок -->
+    <div class="modal fade" id="errorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-circle text-danger mr-2"></i>Error
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="errorMessage"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prismjs/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prismjs/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prismjs/1.24.1/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prismjs/1.24.1/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prismjs/1.24.1/components/prism-markup.min.js"></script>
+
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            var repoId = /*[[${repo.id}]]*/ 0;
+            console.log("Repo ID:", repoId);
+
+            $('#fileTree').jstree({
+                'core': {
+                    'themes': {
+                        'name': 'default',
+                        'responsive': true,
+                        'variant': 'large',
+                        'stripes': true
+                    },
+                    'check_callback': true,
+                    'data': function (node, cb) {
+                        var id = node.id === '#' ? 'root' : node.id;
+                        console.log("Requesting data for node:", id);
+                        $.ajax({
+                            url: '/repository/' + repoId + '/files',
+                            dataType: 'json',
+                            data: { "path": id },
+                            success: function (data) {
+                                console.log("Received data:", data);
+                                var treeData = data.map(function(item) {
+                                    var icon = getFileIcon(item.text, item.type);
+                                    return {
+                                        id: item.id,
+                                        text: item.text,
+                                        type: item.type,
+                                        icon: icon,
+                                        children: item.children,
+                                        state: {
+                                            loaded: !item.children
+                                        }
+                                    };
+                                });
+                                cb(treeData);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.error('Error loading data:', textStatus, errorThrown);
+                                cb([]);
+                            }
+                        });
+                    }
+                },
+                'types': {
+                    'directory': {
+                        'icon': 'fas fa-folder text-warning'
+                    },
+                    'file': {
+                        'icon': 'fas fa-file text-secondary',
+                        'valid_children': []
+                    }
+                },
+                'plugins': ['types', 'state', 'wholerow']
             });
+
+            // Функция для определения иконки файла
+            function getFileIcon(filename, type) {
+                if (type === 'directory') {
+                    return 'fas fa-folder text-warning';
+                }
+
+                const extension = filename.split('.').pop().toLowerCase();
+                const iconMap = {
+                    'js': 'fab fa-js text-warning',
+                    'jsx': 'fab fa-react text-info',
+                    'ts': 'fab fa-js text-primary',
+                    'tsx': 'fab fa-react text-info',
+                    'html': 'fab fa-html5 text-danger',
+                    'css': 'fab fa-css3 text-primary',
+                    'scss': 'fab fa-sass text-pink',
+                    'less': 'fab fa-less text-info',
+                    'py': 'fab fa-python text-primary',
+                    'java': 'fab fa-java text-danger',
+                    'rb': 'fas fa-gem text-danger',
+                    'php': 'fab fa-php text-purple',
+                    'json': 'fas fa-code text-secondary',
+                    'xml': 'fas fa-code text-secondary',
+                    'md': 'fas fa-markdown text-primary',
+                    'yml': 'fas fa-cogs text-secondary',
+                    'yaml': 'fas fa-cogs text-secondary',
+                    'sh': 'fas fa-terminal text-success',
+                    'bash': 'fas fa-terminal text-success',
+                    'txt': 'fas fa-file-alt text-secondary',
+                    'pdf': 'fas fa-file-pdf text-danger',
+                    'doc': 'fas fa-file-word text-primary',
+                    'docx': 'fas fa-file-word text-primary',
+                    'xls': 'fas fa-file-excel text-success',
+                    'xlsx': 'fas fa-file-excel text-success',
+                    'ppt': 'fas fa-file-powerpoint text-danger',
+                    'pptx': 'fas fa-file-powerpoint text-danger',
+                    'zip': 'fas fa-file-archive text-secondary',
+                    'rar': 'fas fa-file-archive text-secondary',
+                    '7z': 'fas fa-file-archive text-secondary',
+                    'tar': 'fas fa-file-archive text-secondary',
+                    'gz': 'fas fa-file-archive text-secondary',
+                    'mp3': 'fas fa-file-audio text-primary',
+                    'wav': 'fas fa-file-audio text-primary',
+                    'mp4': 'fas fa-file-video text-primary',
+                    'avi': 'fas fa-file-video text-primary',
+                    'mov': 'fas fa-file-video text-primary',
+                    'jpg': 'fas fa-file-image text-info',
+                    'jpeg': 'fas fa-file-image text-info',
+                    'png': 'fas fa-file-image text-info',
+                    'gif': 'fas fa-file-image text-info',
+                    'svg': 'fas fa-file-image text-info'
+                };
+
+                return iconMap[extension] || 'fas fa-file text-secondary';
+            }
+
+            // Обработчик выбора узла
+            $('#fileTree').on('select_node.jstree', function (e, data) {
+                var node = data.node;
+                if (node.original && node.original.type === 'file') {
+                    var fileContentUrl = '/repository/' + repoId + '/fileContent?path=' + encodeURIComponent(node.id);
+                    
+                    // Показываем загрузку
+                    $('#fileContentView').html('<div class="loading"><i class="fas fa-spinner fa-spin"></i></div>');
+                    
+                    $.ajax({
+                        url: fileContentUrl,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.error) {
+                                // Показываем специальное сообщение для разных типов ошибок
+                                let errorContent = '';
+                                if (response.type === 'binary') {
+                                    errorContent = `
+                                        <div class="file-header">
+                                            <div class="file-info">
+                                                <i class="${getFileIcon(node.text, 'file')}"></i>
+                                                <span class="filename">${node.text}</span>
+                                                <span class="file-path">${formatPath(node.id)}</span>
+                                            </div>
+                                        </div>
+                                        <div class="binary-file-message">
+                                            <i class="fas fa-exclamation-circle text-warning fa-3x mb-3"></i>
+                                            <h4>Бинарный файл</h4>
+                                            <p>${response.message}</p>
+                                            <a href="#" class="btn btn-sm btn-outline-primary mt-3" onclick="downloadFile('${node.id}')">
+                                                <i class="fas fa-download mr-2"></i>Скачать файл
+                                            </a>
+                                        </div>
+                                    `;
+                                } else if (response.type === 'too_large') {
+                                    errorContent = `
+                                        <div class="file-header">
+                                            <div class="file-info">
+                                                <i class="${getFileIcon(node.text, 'file')}"></i>
+                                                <span class="filename">${node.text}</span>
+                                                <span class="file-path">${formatPath(node.id)}</span>
+                                            </div>
+                                            <div class="file-actions">
+                                                <span class="file-size">${formatFileSize(response.size)}</span>
+                                            </div>
+                                        </div>
+                                        <div class="large-file-message">
+                                            <i class="fas fa-file-alt text-warning fa-3x mb-3"></i>
+                                            <h4>Файл слишком большой</h4>
+                                            <p>${response.message}</p>
+                                            <a href="#" class="btn btn-sm btn-outline-primary mt-3" onclick="downloadFile('${node.id}')">
+                                                <i class="fas fa-download mr-2"></i>Скачать файл
+                                            </a>
+                                        </div>
+                                    `;
+                                } else {
+                                    errorContent = `
+                                        <div class="error-state">
+                                            <i class="fas fa-exclamation-circle text-danger fa-3x mb-3"></i>
+                                            <p>${response.message}</p>
+                                        </div>
+                                    `;
+                                }
+                                $('#fileContentView').html(errorContent);
+                            } else {
+                                var extension = node.text.split('.').pop().toLowerCase();
+                                var language = getLanguageClass(extension);
+                                
+                                var fileHeader = `
+                                    <div class="file-header">
+                                        <div class="file-info">
+                                            <i class="${getFileIcon(node.text, 'file')}"></i>
+                                            <span class="filename">${node.text}</span>
+                                            <span class="file-path">${formatPath(node.id)}</span>
+                                        </div>
+                                        <div class="file-actions">
+                                            <span class="file-size">${formatFileSize(new Blob([response.content]).size)}</span>
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                var codeContent = `
+                                    <div class="code-content">
+                                        <pre><code class="language-${language}">${response.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
+                                    </div>
+                                `;
+                                
+                                $('#fileContentView').html(fileHeader + codeContent);
+                                Prism.highlightAll();
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error('Error loading file content:', textStatus, errorThrown);
+                            $('#fileContentView').html(`
+                                <div class="error-state">
+                                    <i class="fas fa-exclamation-circle text-danger fa-3x mb-3"></i>
+                                    <p>Ошибка при загрузке содержимого файла</p>
+                                </div>
+                            `);
+                        }
+                    });
+                }
+            });
+
+            function getLanguageClass(extension) {
+                const languageMap = {
+                    'js': 'javascript',
+                    'jsx': 'javascript',
+                    'ts': 'typescript',
+                    'tsx': 'typescript',
+                    'html': 'markup',
+                    'xml': 'markup',
+                    'css': 'css',
+                    'scss': 'scss',
+                    'less': 'less',
+                    'java': 'java',
+                    'py': 'python',
+                    'rb': 'ruby',
+                    'php': 'php',
+                    'sql': 'sql',
+                    'sh': 'bash',
+                    'bash': 'bash',
+                    'md': 'markdown'
+                };
+                return languageMap[extension] || 'plaintext';
+            }
+
+            // Функция форматирования пути файла
+            function formatPath(path) {
+                if (!path) return '';
+                const parts = path.split('/');
+                if (parts.length <= 2) return path;
+
+                // Если путь длинный, сокращаем середину
+                const filename = parts.pop();
+                const firstDir = parts[0];
+                const lastDir = parts[parts.length - 1];
+                
+                if (parts.length > 2) {
+                    return `${firstDir}/.../${lastDir}/${filename}`;
+                }
+                return path;
+            }
+
+            // Обновленный обработчик загрузки файлов
+            document.getElementById('directoryInput').addEventListener('change', function(event) {
+                const files = Array.from(event.target.files);
+                console.log("Selected files:", files);
+
+                if (files.length === 0) {
+                    showError('No files selected');
+                    return;
+                }
+
+                const formData = new FormData();
+                const uploadButton = document.getElementById('uploadButton');
+                const progressBar = document.querySelector('#uploadProgress .progress-bar');
+                const progressContainer = document.getElementById('uploadProgress');
+
+                // Вычисляем общий размер файлов
+                const totalSize = files.reduce((acc, file) => acc + file.size, 0);
+                let uploadedSize = 0;
+
+                // Добавляем файлы в FormData
+                files.forEach(file => {
+                    const relativePath = file.webkitRelativePath || file.name;
+                    console.log("Processing file:", relativePath, "Size:", file.size);
+                    formData.append('files', file, relativePath);
+                });
+
+                // Показываем индикатор загрузки
+                uploadButton.disabled = true;
+                uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Uploading...';
+                progressContainer.style.display = 'block';
+                progressBar.style.width = '0%';
+
+                // Отправляем файлы
+                fetch(`/repository/${repoId}/upload`, {
+                    method: 'POST',
+                    body: formData,
+                    // Добавляем обработчик прогресса
+                    onUploadProgress: function(progressEvent) {
+                        if (progressEvent.lengthComputable) {
+                            const percentComplete = (progressEvent.loaded / progressEvent.total) * 100;
+                            progressBar.style.width = percentComplete + '%';
+                            progressBar.setAttribute('aria-valuenow', percentComplete);
+                            
+                            // Обновляем текст кнопки с процентами
+                            uploadButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Uploading ${Math.round(percentComplete)}%`;
+                        }
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 413) {
+                            throw new Error('Files are too large. Maximum total size is 100MB');
+                        }
+                        throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+                    }
+                    // Обновляем дерево файлов
+                    $('#fileTree').jstree(true).refresh();
+                    
+                    // Показываем уведомление об успехе
+                    showSuccess('Files uploaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error uploading directory:', error);
+                    showError(error.message);
+                })
+                .finally(() => {
+                    // Сбрасываем состояние UI
+                    uploadButton.disabled = false;
+                    uploadButton.innerHTML = '<i class="fas fa-upload mr-2"></i>Upload Directory';
+                    progressContainer.style.display = 'none';
+                    progressBar.style.width = '0%';
+                    // Очищаем input
+                    event.target.value = '';
+                });
+            });
+
+            // Функция форматирования размера файла
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Функция для показа ошибок с форматированием
+            function showError(message) {
+                const formattedMessage = message.includes('too large') 
+                    ? message + '. Try uploading fewer files or smaller files.'
+                    : message;
+                
+                $('#errorMessage').html(formattedMessage);
+                $('#errorModal').modal('show');
+            }
+
+            // Функция для показа уведомления об успехе
+            function showSuccess(message) {
+                const alertHtml = `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                `;
+                $('.container-fluid').prepend(alertHtml);
+                
+                // Автоматически скрываем уведомление через 3 секунды
+                setTimeout(() => {
+                    $('.alert').alert('close');
+                }, 3000);
+            }
         });
     </script>
-</head>
-<body>
-<div class="header">
-    <div class="header-left">
-        <h1>Repository: <span th:text="${repo.name}"></span></h1>
-    </div>
-    <div class="header-right">
-        <form id="uploadForm" method="POST" enctype="multipart/form-data" th:action="@{/repository/{id}/upload(id=${repo.id})}">
-            <input type="file" name="files" id="fileInput" multiple style="display: none;" />
-            <button type="button" onclick="document.getElementById('fileInput').click()">Upload Files</button>
-        </form>
-    </div>
-</div>
 
-<p th:if="${repo.description != null}" th:text="${repo.description}"></p>
-<!--<p>Owner ID: <span th:text="${repo.owner}"></span></p>-->
-<p>Created At: <span th:text="${#dates.format(repo.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
-<p>Private: <span th:text="${repo.isPrivate ? 'Yes' : 'No'}"></span></p>
+    <style>
+        /* Основные стили */
+        :root {
+            --navbar-bg: #24292e;
+            --navbar-color: #ffffff;
+            --border-color: #e1e4e8;
+            --tree-hover-bg: #f6f8fa;
+            --content-bg: #ffffff;
+            --sidebar-width: 300px;
+        }
 
-<h2>Files:</h2>
-<ul>
-    <li th:each="file : ${files}">
-        <a th:href="@{/repository/{id}/file/{filePath}(id=${repo.id}, filePath=${file})}" th:text="${file}"></a>
-    </li>
-</ul>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #24292e;
+        }
 
+        /* Навигационная панель */
+        .navbar {
+            background-color: var(--navbar-bg);
+            padding: 0.5rem 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .navbar-brand {
+            font-size: 1.25rem;
+            color: var(--navbar-color);
+        }
+
+        /* Статус приватности */
+        .repo-visibility {
+            display: flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .repo-visibility i {
+            font-size: 0.9rem;
+        }
+
+        .repo-visibility:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Индикатор прогресса */
+        .upload-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            z-index: 1000;
+            margin: 0;
+            border-radius: 0;
+        }
+
+        /* Основной контейнер */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 56px); /* Высота экрана минус высота навбара */
+            overflow: hidden;
+        }
+
+        /* Панель с деревом файлов */
+        .file-tree-panel {
+            width: var(--sidebar-width);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            background-color: var(--content-bg);
+            min-width: 250px;
+            resize: horizontal;
+            max-width: 50vw;
+        }
+
+        #fileTree {
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Панель с содержимым файла */
+        .file-content-panel {
+            flex: 1;
+            overflow-y: auto;
+            background-color: var(--content-bg);
+        }
+
+        .file-content-wrapper {
+            padding: 0;
+            height: 100%;
+        }
+
+        /* Заголовок файла */
+        .file-header {
+            padding: 0.75rem 1rem;
+            background-color: #f6f8fa;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .filename {
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .file-path {
+            color: #586069;
+            font-size: 0.85em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* Содержимое файла */
+        .code-content {
+            padding: 1rem;
+        }
+
+        .code-content pre {
+            margin: 0;
+            padding: 1rem;
+            background-color: #f6f8fa;
+            border-radius: 6px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 12px;
+            line-height: 1.45;
+            overflow-x: auto;
+        }
+
+        /* Состояния пустого контента и загрузки */
+        .empty-state, .loading, .error-state {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #586069;
+            padding: 2rem;
+        }
+
+        /* JSTree кастомизация */
+        .jstree-default .jstree-anchor {
+            height: 24px;
+            line-height: 24px;
+            padding: 0 4px;
+        }
+
+        .jstree-default .jstree-icon {
+            font-size: 1rem;
+        }
+
+        .jstree-default .jstree-wholerow-clicked {
+            background: #e8f0fe;
+        }
+
+        .jstree-default .jstree-clicked {
+            background: transparent;
+            box-shadow: none;
+            color: #0366d6;
+        }
+
+        .jstree-default .jstree-hovered {
+            background: var(--tree-hover-bg);
+            box-shadow: none;
+        }
+
+        /* Кнопки и элементы управления */
+        .btn-outline-light {
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .btn-outline-light:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-color: #ffffff;
+        }
+
+        /* Модальные окна */
+        .modal-content {
+            border: none;
+            border-radius: 6px;
+            box-shadow: 0 8px 24px rgba(149,157,165,0.2);
+        }
+
+        .modal-header {
+            background-color: #f6f8fa;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .file-tree-panel {
+                width: 100%;
+                height: 300px;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .file-content-panel {
+                height: calc(100vh - 356px);
+            }
+        }
+
+        /* Стили для сообщений о бинарных и больших файлах */
+        .binary-file-message,
+        .large-file-message {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+            color: #586069;
+        }
+
+        .binary-file-message h4,
+        .large-file-message h4 {
+            margin: 1rem 0;
+            color: #24292e;
+        }
+
+        .binary-file-message p,
+        .large-file-message p {
+            max-width: 400px;
+            margin-bottom: 0;
+        }
+
+        .btn-outline-primary {
+            color: #0366d6;
+            border-color: #0366d6;
+        }
+
+        .btn-outline-primary:hover {
+            color: #ffffff;
+            background-color: #0366d6;
+            border-color: #0366d6;
+        }
+
+        /* Стили для иконок в сообщениях */
+        .text-warning {
+            color: #f1c40f !important;
+        }
+    </style>
 </body>
 </html>

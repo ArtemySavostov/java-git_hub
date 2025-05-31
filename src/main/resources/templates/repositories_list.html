@@ -3,43 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список репозиториев</title>
-    <link rel="stylesheet" th:href="@{/css/repositories_list.css}">
+    <title>Repositories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/demo/styles.css}">
 </head>
 <body>
-<div class="header">
-    <div class="repo-name">GitHub-Savostov</div>
-    <div class="actions">
-        <a th:href="@{/repo/home}" class="button primary">Back to home</a>
-        <a href="/login" class="button">Sign in</a>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fab fa-github mr-2"></i>
+                GitHub-Savostov
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/repo/home}">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt"></i> Sign in
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="container content-wrapper">
+        <!-- Заголовок и кнопки -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Repositories</h2>
+            <div class="d-flex">
+                <a th:href="@{/repo/create}" class="btn btn-success mr-2">
+                    <i class="fas fa-plus"></i> New
+                </a>
+                <button class="btn btn-outline-secondary" disabled>
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+        </div>
+
+        <!-- Сообщение об отсутствии репозиториев -->
+        <div th:if="${#lists.isEmpty(repositories)}" class="alert alert-info">
+            <i class="fas fa-info-circle mr-2"></i>
+            Нет доступных репозиториев.
+        </div>
+
+        <!-- Список репозиториев -->
+        <div th:if="${not #lists.isEmpty(repositories)}" class="repo-list">
+            <div th:each="repo : ${repositories}" class="repo-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h3>
+                            <i class="far fa-folder mr-2"></i>
+                            <a th:href="@{/repository/{id}(id=${repo.id})}" th:text="${repo.name}"></a>
+                        </h3>
+                        <p class="text-muted" th:text="${'Owner: ' + repo.owner.username}"></p>
+                    </div>
+                    <span class="text-muted" th:text="${'#' + repo.id}"></span>
+                </div>
+                <div class="repo-stats">
+                    <span><i class="far fa-star"></i> 0</span>
+                    <span><i class="fas fa-code-branch"></i> 0</span>
+                    <span><i class="far fa-eye"></i> 0</span>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted">© 2024 GitHub-Savostov</div>
+                <div>
+                    <a href="#" class="mr-3">Terms</a>
+                    <a href="#" class="mr-3">Privacy</a>
+                    <a href="#" class="mr-3">Help</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-<div th:if="${repositories == null or repositories.isEmpty()}">
-    <p>Нет доступных репозиториев.</p>
-</div>
-
-<div th:unless="${repositories == null or repositories.isEmpty()}">
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Owner</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="repo : ${repositories}">
-            <td th:text="${repo.id}"></td>
-            <td>
-                <a th:href="@{/repository/{id}(id=${repo.id})}" th:text="${repo.name}"></a>
-            </td>
-            <td th:text="${repo.owner.username}"></td>
-
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <!-- Скрипты -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

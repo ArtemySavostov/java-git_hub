@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New - Git Manager</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-light">
+    <!-- Навигация из layout.html -->
+
+    <!-- Основной контент -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Заголовок страницы -->
+            <div class="mb-4">
+                <h1 class="h3 mb-0">Create New</h1>
+                <p class="text-muted">Choose what you want to create</p>
+            </div>
+
+            <!-- Карточки для создания -->
+            <div class="row">
+                <!-- Создание репозитория -->
+                <div class="col-md-4 mb-4">
+                    <div class="card create-card h-100">
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-book fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title text-center mb-4">New Repository</h5>
+                            <p class="card-text text-muted text-center mb-4">
+                                Create a new repository to store and manage your code
+                            </p>
+                            <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#newRepoModal">
+                                <i class="fas fa-plus mr-2"></i>Create Repository
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Создание проекта -->
+                <div class="col-md-4 mb-4">
+                    <div class="card create-card h-100">
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-project-diagram fa-3x text-success"></i>
+                            </div>
+                            <h5 class="card-title text-center mb-4">New Project</h5>
+                            <p class="card-text text-muted text-center mb-4">
+                                Create a new project to organize and track your work
+                            </p>
+                            <button class="btn btn-success btn-block" data-toggle="modal" data-target="#newProjectModal">
+                                <i class="fas fa-plus mr-2"></i>Create Project
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Создание команды -->
+                <div class="col-md-4 mb-4">
+                    <div class="card create-card h-100">
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-users fa-3x text-info"></i>
+                            </div>
+                            <h5 class="card-title text-center mb-4">New Team</h5>
+                            <p class="card-text text-muted text-center mb-4">
+                                Create a new team to collaborate with others
+                            </p>
+                            <button class="btn btn-info btn-block" data-toggle="modal" data-target="#newTeamModal">
+                                <i class="fas fa-plus mr-2"></i>Create Team
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Дополнительные действия -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="mb-4">Quick Actions</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="#" class="btn btn-outline-secondary btn-block mb-3">
+                                        <i class="fas fa-upload mr-2"></i>Import Repository
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="#" class="btn btn-outline-secondary btn-block mb-3">
+                                        <i class="fas fa-file-code mr-2"></i>Create from Template
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальные окна -->
+    
+    <!-- Модальное окно создания репозитория -->
+    <div class="modal fade" id="newRepoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create a new repository</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="newRepoForm">
+                        <!-- Владелец -->
+                        <div class="form-group">
+                            <label>Owner</label>
+                            <select class="form-control">
+                                <option value="user">johndoe</option>
+                                <option value="org1">backend-team</option>
+                                <option value="org2">frontend-team</option>
+                            </select>
+                        </div>
+
+                        <!-- Название репозитория -->
+                        <div class="form-group">
+                            <label>Repository name</label>
+                            <input type="text" class="form-control" required
+                                   pattern="^[a-zA-Z0-9_.-]+$"
+                                   placeholder="my-awesome-project">
+                            <small class="form-text text-muted">
+                                Great repository names are short and memorable. Use letters, numbers, hyphens and underscores.
+                            </small>
+                        </div>
+
+                        <!-- Описание -->
+                        <div class="form-group">
+                            <label>Description (optional)</label>
+                            <textarea class="form-control" rows="3" 
+                                    placeholder="Describe your repository"></textarea>
+                        </div>
+
+                        <!-- Приватность -->
+                        <div class="form-group">
+                            <label>Visibility</label>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="repoPublic" name="repoVisibility" 
+                                       class="custom-control-input" checked>
+                                <label class="custom-control-label" for="repoPublic">
+                                    <i class="fas fa-globe-americas mr-2"></i>Public
+                                    <small class="d-block text-muted ml-4">
+                                        Anyone can see this repository. You choose who can commit.
+                                    </small>
+                                </label>
+                            </div>
+                            <div class="custom-control custom-radio mt-2">
+                                <input type="radio" id="repoPrivate" name="repoVisibility" 
+                                       class="custom-control-input">
+                                <label class="custom-control-label" for="repoPrivate">
+                                    <i class="fas fa-lock mr-2"></i>Private
+                                    <small class="d-block text-muted ml-4">
+                                        You choose who can see and commit to this repository.
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Дополнительные опции -->
+                        <div class="form-group">
+                            <label>Initialize this repository with:</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" 
+                                       id="addReadme" checked>
+                                <label class="custom-control-label" for="addReadme">
+                                    Add a README file
+                                </label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" 
+                                       id="addGitignore">
+                                <label class="custom-control-label" for="addGitignore">
+                                    Add .gitignore
+                                </label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" 
+                                       id="addLicense">
+                                <label class="custom-control-label" for="addLicense">
+                                    Add a license
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" form="newRepoForm" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>Create repository
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания проекта -->
+    <div class="modal fade" id="newProjectModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create a new project</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="newProjectForm">
+                        <!-- Название проекта -->
+                        <div class="form-group">
+                            <label>Project name</label>
+                            <input type="text" class="form-control" required
+                                   placeholder="My Awesome Project">
+                        </div>
+
+                        <!-- Описание -->
+                        <div class="form-group">
+                            <label>Description (optional)</label>
+                            <textarea class="form-control" rows="3"
+                                    placeholder="Add a description to help others understand your project"></textarea>
+                        </div>
+
+                        <!-- Шаблон -->
+                        <div class="form-group">
+                            <label>Template</label>
+                            <select class="form-control">
+                                <option value="basic">Basic Kanban</option>
+                                <option value="automated">Automated Kanban</option>
+                                <option value="bugs">Bug Tracking</option>
+                                <option value="feature">Feature Planning</option>
+                                <option value="custom">Custom Template</option>
+                            </select>
+                            <small class="form-text text-muted">
+                                Choose a template to start with predefined columns and automation
+                            </small>
+                        </div>
+
+                        <!-- Видимость -->
+                        <div class="form-group">
+                            <label>Visibility</label>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="projectPublic" name="projectVisibility" 
+                                       class="custom-control-input" checked>
+                                <label class="custom-control-label" for="projectPublic">
+                                    <i class="fas fa-globe-americas mr-2"></i>Public
+                                </label>
+                            </div>
+                            <div class="custom-control custom-radio mt-2">
+                                <input type="radio" id="projectPrivate" name="projectVisibility" 
+                                       class="custom-control-input">
+                                <label class="custom-control-label" for="projectPrivate">
+                                    <i class="fas fa-lock mr-2"></i>Private
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Связанные репозитории -->
+                        <div class="form-group">
+                            <label>Link repositories (optional)</label>
+                            <select class="form-control" multiple>
+                                <option>frontend-app</option>
+                                <option>backend-api</option>
+                                <option>mobile-app</option>
+                                <option>documentation</option>
+                            </select>
+                            <small class="form-text text-muted">
+                                You can link multiple repositories to this project
+                            </small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" form="newProjectForm" class="btn btn-success">
+                        <i class="fas fa-plus mr-2"></i>Create project
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания команды -->
+    <div class="modal fade" id="newTeamModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create a new team</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="newTeamForm">
+                        <!-- Название команды -->
+                        <div class="form-group">
+                            <label>Team name</label>
+                            <input type="text" class="form-control" required
+                                   pattern="^[a-zA-Z0-9_.-]+$"
+                                   placeholder="awesome-team">
+                            <small class="form-text text-muted">
+                                Great team names are short and memorable.
+                            </small>
+                        </div>
+
+                        <!-- Описание -->
+                        <div class="form-group">
+                            <label>Description (optional)</label>
+                            <textarea class="form-control" rows="3"
+                                    placeholder="What does this team work on?"></textarea>
+                        </div>
+
+                        <!-- Родительская команда -->
+                        <div class="form-group">
+                            <label>Parent team (optional)</label>
+                            <select class="form-control">
+                                <option value="">No parent team</option>
+                                <option>Backend Team</option>
+                                <option>Frontend Team</option>
+                                <option>DevOps Team</option>
+                            </select>
+                            <small class="form-text text-muted">
+                                Choose a parent team to create a nested team structure.
+                            </small>
+                        </div>
+
+                        <!-- Приватность -->
+                        <div class="form-group">
+                            <label>Privacy</label>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="teamVisible" name="teamPrivacy" 
+                                       class="custom-control-input" checked>
+                                <label class="custom-control-label" for="teamVisible">
+                                    <i class="fas fa-eye mr-2"></i>Visible
+                                    <small class="d-block text-muted ml-4">
+                                        All members can see this team
+                                    </small>
+                                </label>
+                            </div>
+                            <div class="custom-control custom-radio mt-2">
+                                <input type="radio" id="teamSecret" name="teamPrivacy" 
+                                       class="custom-control-input">
+                                <label class="custom-control-label" for="teamSecret">
+                                    <i class="fas fa-eye-slash mr-2"></i>Secret
+                                    <small class="d-block text-muted ml-4">
+                                        Only members can see this team
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Участники -->
+                        <div class="form-group">
+                            <label>Add members (optional)</label>
+                            <select class="form-control" multiple>
+                                <option>john.doe@example.com</option>
+                                <option>jane.smith@example.com</option>
+                                <option>alex.wilson@example.com</option>
+                                <option>sarah.parker@example.com</option>
+                            </select>
+                            <small class="form-text text-muted">
+                                You can add more members later
+                            </small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" form="newTeamForm" class="btn btn-info">
+                        <i class="fas fa-plus mr-2"></i>Create team
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно Pull Request -->
+    <div class="modal fade" id="newPullRequestModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Pull Request</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="newPullRequestForm">
+                        <!-- Ветки -->
+                        <div class="form-group">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="flex-grow-1">
+                                    <label>Base branch</label>
+                                    <select class="form-control">
+                                        <option>main</option>
+                                        <option>develop</option>
+                                        <option>staging</option>
+                                    </select>
+                                </div>
+                                <div class="mx-3 mt-4">
+                                    <i class="fas fa-arrow-left"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <label>Compare branch</label>
+                                    <select class="form-control">
+                                        <option>feature/new-feature</option>
+                                        <option>bugfix/issue-123</option>
+                                        <option>feature/user-auth</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <small class="form-text text-muted">
+                                Choose branches to merge changes from compare branch into base branch
+                            </small>
+                        </div>
+
+                        <!-- Информация о коммитах -->
+                        <div class="form-group">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Commits</h6>
+                                    <div class="commit-list">
+                                        <div class="commit-item d-flex align-items-center py-2">
+                                            <div class="commit-hash text-muted mr-3">a1b2c3d</div>
+                                            <div class="commit-message flex-grow-1">Add new feature implementation</div>
+                                            <div class="commit-date text-muted">2 hours ago</div>
+                                        </div>
+                                        <div class="commit-item d-flex align-items-center py-2">
+                                            <div class="commit-hash text-muted mr-3">e4f5g6h</div>
+                                            <div class="commit-message flex-grow-1">Fix styling issues</div>
+                                            <div class="commit-date text-muted">3 hours ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Название и описание -->
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="form-control" required
+                                   placeholder="Add a title for your pull request">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" rows="6" required>
+### Changes Made
+- 
+
+### Testing Done
+- 
+
+### Related Issues
+- 
+                            </textarea>
+                            <small class="form-text text-muted">
+                                Describe your changes and why they should be merged
+                            </small>
+                        </div>
+
+                        <!-- Ревьюеры и метки -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Reviewers</label>
+                                    <select class="form-control" multiple>
+                                        <option>john.doe@example.com</option>
+                                        <option>jane.smith@example.com</option>
+                                        <option>alex.wilson@example.com</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Labels</label>
+                                    <select class="form-control" multiple>
+                                        <option>feature</option>
+                                        <option>bug</option>
+                                        <option>documentation</option>
+                                        <option>enhancement</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Настройки -->
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="allowMaintainerEdit" checked>
+                                <label class="custom-control-label" for="allowMaintainerEdit">
+                                    Allow edits from maintainers
+                                </label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="autoMerge">
+                                <label class="custom-control-label" for="autoMerge">
+                                    Auto-merge when ready
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" form="newPullRequestForm" class="btn btn-success">
+                        <i class="fas fa-code-branch mr-2"></i>Create pull request
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно приглашения в команду -->
+    <div class="modal fade" id="teamInvitationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Team Invitation</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="https://github.com/identicons/team1.png" 
+                             class="team-avatar-large mb-3" alt="Backend Team">
+                        <h4>Backend Team</h4>
+                        <p class="text-muted">
+                            Core backend development team
+                        </p>
+                    </div>
+
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <h6 class="card-title">Team Details</h6>
+                            <div class="team-stats">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Members:</span>
+                                    <strong>8 members</strong>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Repositories:</span>
+                                    <strong>12 repositories</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Privacy:</span>
+                                    <strong>
+                                        <i class="fas fa-eye mr-1"></i>Visible
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="invitation-message">
+                        <h6>Message from team admin</h6>
+                        <p class="text-muted">
+                            We'd love to have you join our backend development team. 
+                            You'll have access to our repositories and be able to contribute 
+                            to our ongoing projects.
+                        </p>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" 
+                                   id="notifyEmail" checked>
+                            <label class="custom-control-label" for="notifyEmail">
+                                Receive email notifications for team updates
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Decline
+                    </button>
+                    <button type="button" class="btn btn-success">
+                        <i class="fas fa-check mr-2"></i>Accept invitation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер из layout.html -->
+
+    <!-- Скрипты -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Дополнительные стили */
+        .create-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .create-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .create-card .fa-3x {
+            transition: transform 0.2s ease;
+        }
+
+        .create-card:hover .fa-3x {
+            transform: scale(1.1);
+        }
+
+        /* Стили для Pull Request */
+        .commit-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .commit-item {
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .commit-item:last-child {
+            border-bottom: none;
+        }
+
+        .commit-hash {
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        /* Стили для Team Invitation */
+        .team-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+        }
+
+        .team-stats {
+            font-size: 0.9em;
+        }
+
+        .invitation-message {
+            border-left: 4px solid #28a745;
+            padding-left: 1rem;
+        }
+    </style>
+</body>
+</html> 

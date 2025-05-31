@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>git-manager - Git Manager</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prismjs/1.24.1/themes/prism.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-light">
+    <!-- Навигация из layout.html -->
+
+    <!-- Подзаголовок репозитория -->
+    <div class="repo-header">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center py-3">
+                <h1 class="h4 mb-0">
+                    <i class="fas fa-book text-muted mr-2"></i>
+                    <a href="#" class="text-muted">YourUsername</a>
+                    <span class="text-muted">/</span>
+                    <a href="#" class="font-weight-bold">git-manager</a>
+                </h1>
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="btn-group mr-3">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="far fa-eye mr-1"></i>Watch
+                            <span class="badge badge-light ml-1">23</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="far fa-star mr-1"></i>Star
+                            <span class="badge badge-light ml-1">128</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-code-branch mr-1"></i>Fork
+                            <span class="badge badge-light ml-1">24</span>
+                        </button>
+                    </div>
+                    <button class="btn btn-sm btn-success">
+                        <i class="fas fa-download mr-1"></i>Clone
+                    </button>
+                </div>
+            </div>
+
+            <!-- Навигация репозитория -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="fas fa-code mr-1"></i>Code
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-exclamation-circle mr-1"></i>Issues
+                        <span class="badge badge-secondary">12</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-code-branch mr-1"></i>Pull Requests
+                        <span class="badge badge-secondary">3</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-play mr-1"></i>Actions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-project-diagram mr-1"></i>Projects
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-book mr-1"></i>Wiki
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-shield-alt mr-1"></i>Security
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-chart-bar mr-1"></i>Insights
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-cog mr-1"></i>Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="content-wrapper py-3">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Информация о ветке -->
+                <div class="col-12 mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="branch-selector dropdown">
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                <i class="fas fa-code-branch mr-1"></i>
+                                master
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item active" href="#">
+                                    <i class="fas fa-code-branch mr-2"></i>master
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-code-branch mr-2"></i>develop
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-plus mr-2"></i>New branch
+                                </a>
+                            </div>
+                        </div>
+                        <div class="branch-info ml-3">
+                            <span class="text-muted">
+                                <i class="fas fa-code-commit mr-1"></i>
+                                Last commit: 2d4e8fa
+                            </span>
+                            <span class="text-muted ml-3">
+                                <i class="far fa-clock mr-1"></i>
+                                2 hours ago
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Дерево файлов и содержимое -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="d-flex">
+                                <!-- Дерево файлов -->
+                                <div class="file-tree-panel">
+                                    <div id="fileTree"></div>
+                                </div>
+
+                                <!-- Содержимое файла -->
+                                <div class="file-content-panel">
+                                    <div class="file-header">
+                                        <div class="file-info">
+                                            <i class="fab fa-java text-danger"></i>
+                                            <span class="filename">GitService.java</span>
+                                            <span class="file-path">src/main/java/com/savostov/git_manager/service/GitService.java</span>
+                                        </div>
+                                        <div class="file-actions">
+                                            <button class="btn btn-sm btn-outline-secondary mr-2">
+                                                <i class="fas fa-history mr-1"></i>History
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fas fa-edit mr-1"></i>Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="file-content">
+                                        <pre><code class="language-java">
+package com.savostov.git_manager.service;
+
+import lombok.Data;
+import lombok.Getter;
+import org.springframework.stereotype.Service;
+
+@Service
+public class GitService {
+    // Код файла
+}
+                                        </code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер из layout.html -->
+
+    <!-- Скрипты -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prismjs/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prismjs/1.24.1/components/prism-java.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Инициализация дерева файлов
+            $('#fileTree').jstree({
+                'core': {
+                    'themes': {
+                        'name': 'default',
+                        'responsive': true,
+                        'variant': 'large'
+                    },
+                    'data': [
+                        {
+                            'text': 'src',
+                            'icon': 'fas fa-folder text-warning',
+                            'state': { 'opened': true },
+                            'children': [
+                                {
+                                    'text': 'main',
+                                    'icon': 'fas fa-folder text-warning',
+                                    'state': { 'opened': true },
+                                    'children': [
+                                        {
+                                            'text': 'java',
+                                            'icon': 'fas fa-folder text-warning',
+                                            'children': [
+                                                {
+                                                    'text': 'GitService.java',
+                                                    'icon': 'fab fa-java text-danger'
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            'text': 'resources',
+                                            'icon': 'fas fa-folder text-warning',
+                                            'children': [
+                                                {
+                                                    'text': 'application.properties',
+                                                    'icon': 'fas fa-cog text-secondary'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                'plugins': ['wholerow']
+            });
+        });
+    </script>
+
+    <style>
+        /* Дополнительные стили для страницы репозитория */
+        .repo-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .branch-selector .btn {
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        .file-content {
+            padding: 1rem;
+        }
+
+        .file-content pre {
+            margin: 0;
+            border-radius: 6px;
+        }
+
+        .file-content code {
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* Улучшенные стили для вкладок */
+        .nav-tabs {
+            border-bottom: none;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            padding: 0.75rem 1rem;
+            margin-bottom: -1px;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border-bottom-color: var(--border-color);
+            color: var(--navbar-bg);
+        }
+
+        .nav-tabs .nav-link.active {
+            border-bottom-color: var(--link-color);
+            color: var(--navbar-bg);
+            font-weight: 600;
+        }
+
+        .nav-tabs .badge {
+            font-size: 0.75rem;
+            padding: 0.25em 0.6em;
+        }
+    </style>
+</body>
+</html> 

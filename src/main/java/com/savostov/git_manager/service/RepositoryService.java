@@ -1,6 +1,8 @@
 package com.savostov.git_manager.service;
 
+import com.savostov.git_manager.model.Member;
 import com.savostov.git_manager.model.User;
+import com.savostov.git_manager.repository.MemberRepository;
 import com.savostov.git_manager.repository.RepositoryRepository;
 import com.savostov.git_manager.repository.UserRepository;
 import org.slf4j.Logger;
@@ -8,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import com.savostov.git_manager.model.Repo;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +22,10 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.nio.file.Files.isDirectory;
 
 @Service
 public class RepositoryService {
@@ -36,6 +41,9 @@ public class RepositoryService {
     @Autowired
     private GitService gitService;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     @Transactional
     public Repo createRepository(User owner, String repositoryName, boolean isPrivate) {
         Repo repository = new Repo();
@@ -46,6 +54,11 @@ public class RepositoryService {
         repository.setPath(path);
         repository = repositoryRepository.save(repository);
 
+        Member member = new Member();
+        member.setUser(owner);
+        member.setRepo(repository);
+        member.setRole("ADMIN");
+        memberRepository.save(member);
         String userRootDirectory = getUserRootDirectory(owner);
         createRepositoryDirectory(userRootDirectory, repositoryName);
         return repository;
@@ -125,6 +138,20 @@ public class RepositoryService {
 
     }
 
+    public List<Repo> getRepositoryWithOutPrivate(String username) {
+        Optional<User> ownerOptional = userRepository.findByUsername(username);
+        if (ownerOptional.isPresent()) {
+            User owner = ownerOptional.get();
+            List<Repo> repositories = repositoryRepository.findByOwnerId(owner.getId());
+            List<Repo> repoWhithoutPrivate = repositories.stream().filter(p -> !p.isPrivate()).collect(Collectors.toList());
+            return repoWhithoutPrivate;
+        } else {
+
+            return List.of();
+        }
+
+    }
+
     public Optional<Repo> getRepositoryByName(String repositoryName) {
         Optional<Repo> repository = repositoryRepository.getRepositoryByName(repositoryName);
         return repository;
@@ -133,15 +160,83 @@ public class RepositoryService {
     public void uplodFiles(Long id, MultipartFile[] files) throws IOException {
         Repo repo = repositoryRepository.getReferenceById(id);
         Path repoPath = Paths.get(repo.getPath());
+
+
         if (!Files.exists(repoPath)) {
             Files.createDirectories(repoPath);
         }
+
+
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
-                Path filePath = repoPath.resolve(file.getOriginalFilename());
-                Files.copy(file.getInputStream(), filePath);
-                System.out.println("Uploaded " + filePath.toString());
+
+                String relativePath = file.getOriginalFilename();
+                if (relativePath != null) {
+
+                    Path targetPath = repoPath.resolve(relativePath).normalize();
+
+
+                    if (!targetPath.startsWith(repoPath)) {
+                        throw new SecurityException("Invalid file path: " + relativePath);
+                    }
+
+
+                    Files.createDirectories(targetPath.getParent());
+
+
+                    Files.copy(file.getInputStream(), targetPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println("Uploaded file: " + targetPath);
+                }
             }
         }
     }
+
+    public List<Map<String, Object>> getFileStructure(Long repoId, String subPath) {
+        Repo repo = repositoryRepository.getReferenceById(repoId);
+        Path repoPath = Paths.get(repo.getPath());
+
+        try {
+            List<String> items = gitService.getFiles(repoPath.toString()); // Получаем и файлы, и каталоги
+            Path resolvedPath = repoPath;
+            if (subPath != null && !subPath.isEmpty()) {
+                resolvedPath = repoPath.resolve(subPath).normalize();
+            }
+
+            Path finalResolvedPath = resolvedPath; // Для использования в лямбда-выражении
+
+            return items.stream().map(itemPath -> {
+                Path fullPath = repoPath.resolve(finalResolvedPath).resolve(itemPath).normalize(); // Combine repoPath, subPath, and itemPath
+                Path relativePath = repoPath.relativize(fullPath);
+
+                Map<String, Object> node = new HashMap<>();
+                node.put("id", relativePath.toString());
+                node.put("text", relativePath.getFileName().toString());
+                node.put("type", Files.isDirectory(fullPath) ? "directory" : "file");
+                return node;
+            }).collect(Collectors.toList());
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+
+    private boolean isDirectory(Path repoPath, String filePath) {
+        Path fullPath = repoPath.resolve(filePath);
+        return Files.isDirectory(fullPath);
+    }
+
+
+    public String getFileContentFromGit(Long repoId, String path) throws IOException, InterruptedException {
+        Path repoPath = Paths.get(repositoriesPath, "repo_" + repoId);
+        String repositoryPath = repoPath.toString();
+
+        return gitService.getFileContent(repositoryPath, path);
+    }
+
+    public Repo getRepositoryById(Long id){
+        return repositoryRepository.getById(id);
+    }
+
 }

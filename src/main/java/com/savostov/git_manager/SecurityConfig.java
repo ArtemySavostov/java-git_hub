@@ -62,7 +62,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/repo/home", true)
+                        .defaultSuccessUrl("/home", true)
                         .failureUrl("/login?error=true")
                 )
                 .logout(logout -> logout
@@ -75,3 +75,4 @@ public class SecurityConfig {
 
     }
 }
+

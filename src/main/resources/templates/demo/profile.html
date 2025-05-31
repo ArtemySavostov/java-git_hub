@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John Doe - Git Manager</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-light">
+    <!-- Навигация из layout.html -->
+
+    <!-- Основной контент -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Левая колонка с информацией профиля -->
+                <div class="col-md-3">
+                    <div class="profile-sidebar">
+                        <!-- Основная информация -->
+                        <div class="text-center mb-4">
+                            <img src="https://github.com/identicons/user.png" class="avatar-xlarge mb-3" alt="John Doe">
+                            <h1 class="h3 mb-1">John Doe</h1>
+                            <p class="text-muted">@johndoe</p>
+                        </div>
+
+                        <!-- Био -->
+                        <div class="mb-4">
+                            <p>Full-stack developer passionate about clean code and modern technologies.</p>
+                        </div>
+
+                        <!-- Статистика -->
+                        <div class="profile-stats mb-4">
+                            <a href="#" class="text-dark mr-3">
+                                <i class="fas fa-users mr-1"></i>
+                                <strong>234</strong> followers
+                            </a>
+                            <a href="#" class="text-dark">
+                                <strong>56</strong> following
+                            </a>
+                        </div>
+
+                        <!-- Контактная информация -->
+                        <div class="profile-info">
+                            <div class="mb-2">
+                                <i class="fas fa-building mr-2 text-muted"></i>
+                                <span>Tech Company Inc.</span>
+                            </div>
+                            <div class="mb-2">
+                                <i class="fas fa-map-marker-alt mr-2 text-muted"></i>
+                                <span>San Francisco, CA</span>
+                            </div>
+                            <div class="mb-2">
+                                <i class="fas fa-envelope mr-2 text-muted"></i>
+                                <a href="mailto:john.doe@example.com">john.doe@example.com</a>
+                            </div>
+                            <div class="mb-2">
+                                <i class="fas fa-globe mr-2 text-muted"></i>
+                                <a href="https://johndoe.dev" target="_blank">johndoe.dev</a>
+                            </div>
+                            <div>
+                                <i class="fab fa-twitter mr-2 text-muted"></i>
+                                <a href="https://twitter.com/johndoe" target="_blank">@johndoe</a>
+                            </div>
+                        </div>
+
+                        <!-- Достижения -->
+                        <div class="achievements mt-4">
+                            <h3 class="h6 mb-3">Achievements</h3>
+                            <div class="achievement-badges">
+                                <img src="https://github.githubassets.com/images/modules/profile/achievements/arctic-code-vault-contributor-default.png" 
+                                     class="achievement-badge" alt="Arctic Code Vault Contributor" 
+                                     data-toggle="tooltip" title="Arctic Code Vault Contributor">
+                                <img src="https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png"
+                                     class="achievement-badge" alt="Pull Shark"
+                                     data-toggle="tooltip" title="Pull Shark">
+                                <img src="https://github.githubassets.com/images/modules/profile/achievements/yolo-default.png"
+                                     class="achievement-badge" alt="YOLO"
+                                     data-toggle="tooltip" title="YOLO">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Правая колонка с активностью -->
+                <div class="col-md-9">
+                    <!-- Вкладки -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-white">
+                            <ul class="nav nav-tabs card-header-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#">
+                                        <i class="fas fa-book mr-1"></i>
+                                        Repositories
+                                        <span class="badge badge-secondary">28</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-project-diagram mr-1"></i>
+                                        Projects
+                                        <span class="badge badge-secondary">5</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-cube mr-1"></i>
+                                        Packages
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="far fa-star mr-1"></i>
+                                        Stars
+                                        <span class="badge badge-secondary">142</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- График активности -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Contribution Activity</h3>
+                            <div class="contribution-graph">
+                                <!-- Здесь будет график активности -->
+                                <div class="contribution-placeholder">
+                                    <div class="contribution-row">
+                                        <div class="contribution-cell" style="background-color: #9be9a8;"></div>
+                                        <div class="contribution-cell" style="background-color: #40c463;"></div>
+                                        <div class="contribution-cell" style="background-color: #30a14e;"></div>
+                                        <div class="contribution-cell" style="background-color: #216e39;"></div>
+                                        <div class="contribution-cell" style="background-color: #9be9a8;"></div>
+                                        <div class="contribution-cell" style="background-color: #40c463;"></div>
+                                        <div class="contribution-cell" style="background-color: #30a14e;"></div>
+                                    </div>
+                                    <!-- Добавьте больше рядов для полного графика -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Популярные репозитории -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Popular Repositories</h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="repo-card h-100">
+                                        <h4 class="h6 mb-2">
+                                            <a href="#" class="d-flex align-items-center">
+                                                <i class="fas fa-book mr-2"></i>
+                                                awesome-project
+                                            </a>
+                                        </h4>
+                                        <p class="text-muted small mb-2">A collection of awesome things</p>
+                                        <div class="repo-stats small">
+                                            <span class="mr-3">
+                                                <i class="fas fa-circle text-warning mr-1"></i>
+                                                JavaScript
+                                            </span>
+                                            <span class="mr-3">
+                                                <i class="far fa-star mr-1"></i>
+                                                128
+                                            </span>
+                                            <span>
+                                                <i class="fas fa-code-branch mr-1"></i>
+                                                24
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="repo-card h-100">
+                                        <h4 class="h6 mb-2">
+                                            <a href="#" class="d-flex align-items-center">
+                                                <i class="fas fa-book mr-2"></i>
+                                                git-manager
+                                            </a>
+                                        </h4>
+                                        <p class="text-muted small mb-2">Modern Git repository manager</p>
+                                        <div class="repo-stats small">
+                                            <span class="mr-3">
+                                                <i class="fas fa-circle text-danger mr-1"></i>
+                                                Java
+                                            </span>
+                                            <span class="mr-3">
+                                                <i class="far fa-star mr-1"></i>
+                                                86
+                                            </span>
+                                            <span>
+                                                <i class="fas fa-code-branch mr-1"></i>
+                                                12
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Последняя активность -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Recent Activity</h3>
+                            <div class="activity-timeline">
+                                <div class="activity-item">
+                                    <div class="activity-content">
+                                        <i class="fas fa-code-branch text-success mr-2"></i>
+                                        <strong>Created a pull request</strong> in
+                                        <a href="#">awesome-project</a>
+                                        <small class="text-muted ml-2">2 hours ago</small>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-content">
+                                        <i class="fas fa-star text-warning mr-2"></i>
+                                        <strong>Starred</strong>
+                                        <a href="#">some/repository</a>
+                                        <small class="text-muted ml-2">yesterday</small>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-content">
+                                        <i class="fas fa-code text-primary mr-2"></i>
+                                        <strong>Pushed</strong> to
+                                        <a href="#">git-manager</a>
+                                        <small class="text-muted ml-2">2 days ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер из layout.html -->
+
+    <!-- Скрипты -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Дополнительные стили для профиля */
+        .profile-sidebar {
+            position: sticky;
+            top: 1rem;
+        }
+
+        .avatar-xlarge {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .profile-stats a {
+            text-decoration: none;
+        }
+
+        .profile-stats a:hover {
+            color: var(--link-color) !important;
+        }
+
+        .achievement-badges {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .achievement-badge {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .repo-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .repo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .activity-timeline {
+            position: relative;
+        }
+
+        .activity-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .contribution-graph {
+            background-color: #f6f8fa;
+            border-radius: 6px;
+            padding: 1rem;
+        }
+
+        .contribution-row {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 3px;
+        }
+
+        .contribution-cell {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .profile-sidebar {
+                margin-bottom: 2rem;
+                position: static;
+            }
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+</body>
+</html> 

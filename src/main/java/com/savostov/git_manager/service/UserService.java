@@ -38,16 +38,18 @@ public class UserService {
         userRepository.save(user);
         //repositoryService.createDefaultRepository(user);
         repositoryService.getUserRootDirectory(user);
-       // repositoryService.createDefaultRepository(user);
+        // repositoryService.createDefaultRepository(user);
     }
-    public Optional<User> findUserById(long id){
+
+    public Optional<User> findUserById(long id) {
         return userRepository.findById(id);
     }
 
-    public Optional<User> findUserByUsername(String username){
+    public Optional<User> findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-    public List<User> getAllUsers(){
+
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -57,5 +59,41 @@ public class UserService {
 
     public void saveUser(User newUser) {
         userRepository.save(newUser);
+    }
+
+    @Transactional
+    public void subscriber(Long subscriberId, Long subscriberToId) {
+        User subscriber = userRepository.findById(subscriberId)
+                .orElseThrow(() -> new RuntimeException("Subscriber not found"));
+        User subscriberedTo = userRepository.findById(subscriberToId)
+                .orElseThrow(() -> new RuntimeException("User to subscribe not found"));
+        subscriber.getSubscriptions().add(subscriberedTo);
+        userRepository.save(subscriber);
+    }
+
+    public void unsubscribe(Long subscriberId, Long subscriberToId) {
+        User subscriber = userRepository.findById(subscriberId)
+                .orElseThrow(() -> new RuntimeException("Subscriber not found"));
+        User subscriberedTo = userRepository.findById(subscriberToId)
+                .orElseThrow(() -> new RuntimeException("User to subscribe not found"));
+        subscriber.getSubscriptions().remove(subscriberedTo);
+        userRepository.save(subscriber);
+    }
+
+
+    public List<User> findUserByUsernameNot(String username) {
+        return userRepository.findUserByUsernameNot(username);
+    }
+
+    public int getFollowingCount(Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> user.getSubscribers().size())
+                .orElse(0);
+    }
+
+    public int getFollowersCount(Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> user.getSubscriptions().size())
+                .orElse(0);
     }
 }

@@ -1,0 +1,173 @@
+/* Переменные */
+:root {
+    --navbar-bg: #24292e;
+    --navbar-color: #ffffff;
+    --border-color: #e1e4e8;
+    --link-color: #0366d6;
+    --text-muted: #6a737d;
+    --bg-gray: #f6f8fa;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffd33d;
+}
+
+/* Профиль */
+.profile-sidebar {
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.avatar-xlarge {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.avatar-user-list {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+}
+
+.profile-stats {
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.profile-stats a {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.profile-stats a:hover {
+    color: var(--link-color);
+}
+
+.profile-info {
+    padding-top: 1rem;
+}
+
+/* Вкладки */
+.nav-tabs {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    padding: 0.5rem 1rem;
+    margin-bottom: -1px;
+}
+
+.nav-tabs .nav-link:hover {
+    border-bottom-color: var(--border-color);
+    color: var(--navbar-bg);
+}
+
+.nav-tabs .nav-link.active {
+    border-bottom-color: var(--link-color);
+    color: var(--navbar-bg);
+}
+
+/* Репозитории */
+.repo-card {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+    transition: transform 0.2s ease;
+}
+
+.repo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.repo-stats {
+    display: flex;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Статус приватности */
+.repo-visibility {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background-color: var(--bg-gray);
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.repo-visibility i {
+    font-size: 0.875rem;
+}
+
+.repo-visibility:hover {
+    background-color: #e1e4e8;
+}
+
+/* График активности */
+.contribution-graph {
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 6px;
+}
+
+.contribution-placeholder {
+    display: flex;
+    gap: 3px;
+}
+
+.contribution-row {
+    display: flex;
+    gap: 3px;
+}
+
+.contribution-cell {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .profile-sidebar {
+        margin-bottom: 1.5rem;
+    }
+    
+    .repo-stats {
+        flex-wrap: wrap;
+    }
+}
+
+.user-menu-dropdown {
+    min-width: 260px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e1e4e8;
+    box-shadow: 0 8px 24px rgba(149,157,165,0.2);
+}
+.user-menu-dropdown .dropdown-item {
+    padding: 0.75rem 1.25rem;
+    color: #24292e;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+.user-menu-dropdown .dropdown-item:hover {
+    background: #f6f8fa;
+    color: #0366d6;
+} 
