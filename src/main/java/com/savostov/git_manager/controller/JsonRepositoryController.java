@@ -12,7 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,10 +39,10 @@ public class JsonRepositoryController {
         this.repositoryRepository = repositoryRepository;
     }
 
-    @GetMapping("/repository/{id}/files") // Separate endpoint for JSON data
+    @GetMapping("/repository/{id}/files")
     public List<Map<String, Object>> getFiles(@PathVariable Long id,
                                               @RequestParam(value = "path", required = false, defaultValue = "") String path) {
-        return fileStructureService.getFileStructure(id, path); // Return the JSON data
+        return fileStructureService.getFileStructure(id, path);
     }
 
     @GetMapping("/repository/{id}/fileContent")

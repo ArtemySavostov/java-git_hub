@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +58,7 @@ public class RepositoryController {
     @GetMapping("/repository/{id}")
     public String showRepository(@PathVariable Long id,
                                  @RequestParam(value = "path", required = false, defaultValue = "") String path,
-                                 Model model) throws ChangeSetPersister.NotFoundException, IOException, InterruptedException {
+                                 Model model) throws ChangeSetPersister.NotFoundException {
 
         Repo repository = repositoryRepository.findById(id)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
@@ -79,7 +80,9 @@ public class RepositoryController {
 
     @GetMapping("/repository/{id}/file/**")
     public String showFiles(@PathVariable Long id, HttpServletRequest request, Model model) throws ChangeSetPersister.NotFoundException, IOException, InterruptedException {
+        
         String filePath = extractFilePath(request, "/repository/" + id + "/file/");
+        System.out.println("show files"+": id=" + id + ", path=" + filePath);
         String decodedFilePath = UriUtils.decode(filePath, StandardCharsets.UTF_8);
         System.out.println("Extracted filePath: " + decodedFilePath);
         Repo repository = repositoryRepository.findById(id)
@@ -110,6 +113,7 @@ public class RepositoryController {
 
     @GetMapping("/fileContent")
     public ResponseEntity<String> getFileContent(@PathVariable Long repoId, @RequestParam String path) {
+        System.out.println("getFileContent: id=" + repoId + ", path=" + path);
         try {
             String content = repositoryService.getFileContentFromGit(repoId, path);
             return ResponseEntity.ok(content);
@@ -119,18 +123,36 @@ public class RepositoryController {
     }
 
 
-    @GetMapping("/repository/members")
+    @GetMapping("/repository/{repoId}/collaborations")
     public String collaborations(@PathVariable Long repoId, Model model) {
-        List<User> userList = userService.getAllUsers();
+        Repo repo = repositoryRepository.getReferenceById(repoId);
+        List<User> userList = userService.findUserByUsernameNot(repo.getOwner().getUsername());
         model.addAttribute(userList);
-        return "repository_members";
+        return "collaborations";
     }
 
-    @PostMapping("/repository/members/add")
-    public void addMemberToRepository(@PathVariable Long repoId, @PathVariable Long userId, @PathVariable String role) {
-
+    @PostMapping("/repository/{repoId}/members/add")
+    public String addMemberToRepository(@PathVariable Long repoId, @RequestParam Long userId, @RequestParam String role) {
         memberService.addMemberToRepo(repoId, userId, role);
+        return "redirect:/repository/" + repoId;
+    }
 
+    @GetMapping("/collaborations")
+    public String getCollaborationsList(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User currentUser = userService.getUserByUsername(username).orElse(null);
+        if (currentUser == null) return "redirect:/login";
+        List<Repo> collaborationList = repositoryService.getListColloborations(currentUser.getId());
+        Map<Long, String> repoOwnerMap = new HashMap<>();
+        for (Repo repo : collaborationList) {
+            if (repo.getOwner() != null) {
+                repoOwnerMap.put(repo.getId(), repo.getOwner().getUsername());
+            }
+        }
+        model.addAttribute("repos", collaborationList);
+        model.addAttribute("repoOwnerMap", repoOwnerMap);
+        return "collaborations_list";
     }
 
 

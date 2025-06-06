@@ -30,7 +30,7 @@ public class MemberService {
         Member member = new Member();
         member.setRepo(repo);
         member.setUser(user);
-        member.setRole("READ");
+        member.setRole(role);
 
         return memberRepository.save(member);
     }

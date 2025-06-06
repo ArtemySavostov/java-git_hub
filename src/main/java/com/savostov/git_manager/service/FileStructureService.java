@@ -35,7 +35,6 @@ public class FileStructureService {
             System.out.println("Flattened list size: " + flatList.size());
             return flatList;
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -44,14 +43,13 @@ public class FileStructureService {
         System.out.println("Flattening node: " + node.getName() + " for subPath: " + subPath);
         List<Map<String, Object>> result = new ArrayList<>();
 
-        // Если subPath пустой или "root", возвращаем содержимое корневой директории
         if (subPath == null || subPath.isEmpty() || subPath.equals("root")) {
             for (GitService.Node child : node.getChildren()) {
                 Map<String, Object> item = new HashMap<>();
                 item.put("id", child.getPath());
                 item.put("text", child.getName());
                 item.put("type", child.isDirectory() ? "directory" : "file");
-                // Если это директория и в ней есть файлы, помечаем что есть дочерние элементы
+
                 if (child.isDirectory() && !child.getChildren().isEmpty()) {
                     item.put("children", true);
                 } else {
@@ -63,7 +61,7 @@ public class FileStructureService {
             return result;
         }
 
-        // Ищем нужную поддиректорию
+
         GitService.Node targetNode = findNodeByPath(node, subPath);
         if (targetNode != null && targetNode.isDirectory()) {
             for (GitService.Node child : targetNode.getChildren()) {
@@ -71,7 +69,6 @@ public class FileStructureService {
                 item.put("id", child.getPath());
                 item.put("text", child.getName());
                 item.put("type", child.isDirectory() ? "directory" : "file");
-                // Если это директория и в ней есть файлы, помечаем что есть дочерние элементы
                 if (child.isDirectory() && !child.getChildren().isEmpty()) {
                     item.put("children", true);
                 } else {
@@ -110,21 +107,18 @@ public class FileStructureService {
 
     private boolean shouldShowNode(String nodePath, String requestedPath) {
         System.out.println("Checking node: " + nodePath + " for requested path: " + requestedPath);
-        
-        // Для корневого уровня
+
         if (requestedPath.isEmpty()) {
             boolean shouldShow = !nodePath.contains("/");
             System.out.println("Root level check for " + nodePath + ": " + shouldShow);
             return shouldShow;
         }
 
-        // Для точного совпадения
         if (nodePath.equals(requestedPath)) {
             System.out.println("Exact match for " + nodePath);
             return true;
         }
 
-        // Для прямых потомков
         if (nodePath.startsWith(requestedPath + "/")) {
             String relativePath = nodePath.substring(requestedPath.length() + 1);
             boolean isDirectChild = !relativePath.contains("/");

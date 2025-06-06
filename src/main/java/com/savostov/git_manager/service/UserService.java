@@ -57,9 +57,6 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public void saveUser(User newUser) {
-        userRepository.save(newUser);
-    }
 
     @Transactional
     public void subscriber(Long subscriberId, Long subscriberToId) {

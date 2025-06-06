@@ -28,9 +28,12 @@
                 </div>
                 <!-- Кнопка загрузки -->
                 <input type="file" id="directoryInput" webkitdirectory directory multiple style="display: none;" />
-                <button id="uploadButton" class="btn btn-outline-light" onclick="document.getElementById('directoryInput').click()">
+                <button id="uploadButton" class="btn btn-outline-light mr-2" onclick="document.getElementById('directoryInput').click()">
                     <i class="fas fa-upload mr-2"></i>Upload Directory
                 </button>
+                <a th:href="@{'/repository/' + ${repo.id} + '/collaborations'}" class="btn btn-outline-light">
+                    <i class="fas fa-users mr-2"></i>Collaborators
+                </a>
             </div>
         </div>
     </nav>

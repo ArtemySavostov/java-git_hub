@@ -64,7 +64,6 @@ public class RepositoryService {
         return repository;
     }
 
-    // ДОБАВИТЬ ПРОВЕРКУ СУЩЕСТВУЕТ ЛИ РЕПО!!!!!!!!!!!!
     private void createRepositoryDirectory(String userRootDirectory, String repositoryName) {
 
         String repositoryPath = userRootDirectory + "/" + repositoryName;
@@ -80,7 +79,8 @@ public class RepositoryService {
     }
 
     private void initializeGitRepository(String repositoryPath) throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder("/usr/bin/git", "init");
+        String gitCommand = System.getenv().getOrDefault("GIT_COMMAND", "git");
+        ProcessBuilder processBuilder = new ProcessBuilder(gitCommand, "init");
         processBuilder.directory(new File(repositoryPath));
         processBuilder.redirectErrorStream(true);
 
@@ -229,14 +229,17 @@ public class RepositoryService {
 
 
     public String getFileContentFromGit(Long repoId, String path) throws IOException, InterruptedException {
-        Path repoPath = Paths.get(repositoriesPath, "repo_" + repoId);
-        String repositoryPath = repoPath.toString();
-
+        Repo repo = repositoryRepository.getReferenceById(repoId);
+        String repositoryPath = repo.getPath();
         return gitService.getFileContent(repositoryPath, path);
     }
 
     public Repo getRepositoryById(Long id){
         return repositoryRepository.getById(id);
+    }
+
+    public List<Repo> getListColloborations(Long userId){
+        return repositoryRepository.findReposWhereUserIsCollaboratorNotOwner(userId);
     }
 
 }

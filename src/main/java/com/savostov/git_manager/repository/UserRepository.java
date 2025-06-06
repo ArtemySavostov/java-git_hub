@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     public List<User> findUserByUsernameNot(String username);
 
+
+    public User getByEmail(String email);
+    public User getByUsername(String username);
     @Query("SELECT COUNT(s) FROM User u JOIN u.subscribers s WHERE u.id = :userId")
     int countFollowers(@Param("userId") Long userId);
 

@@ -20,4 +20,8 @@ public interface RepositoryRepository extends JpaRepository<Repo, Long> {
                 "WHERE r.owner = :user AND (r.isPrivate = false OR m.user IS NOT NULL)")
         List<Repo> findAccessibleReposByOwnerId(@Param("user") User user);
 
+        @Query("SELECT r FROM Repo r JOIN Member m ON r.id = m.repo.id " +
+                "WHERE m.user.id = :userId AND r.owner.id <> :userId")
+        List<Repo> findReposWhereUserIsCollaboratorNotOwner(@Param("userId") Long userId);
+
 }

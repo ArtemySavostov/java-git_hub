@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои коллаборации</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+</head>
+<body class="bg-light">
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">
+                <i class="fab fa-github mr-2"></i>
+                Git Manager
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Мои коллаборации</h2>
+        </div>
+        <div th:if="${#lists.isEmpty(repos)}" class="alert alert-info">
+            <i class="fas fa-info-circle mr-2"></i>
+            Вы не являетесь участником ни одного репозитория.
+        </div>
+        <div th:if="${not #lists.isEmpty(repos)}">
+            <div class="row">
+                <div th:each="repo : ${repos}" class="col-md-6 col-lg-4 mb-4">
+                    <div class="card repo-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">
+                                <a th:href="@{/repository/{id}(id=${repo.id})}" class="text-dark">
+                                    <i class="fas fa-book mr-2"></i>
+                                    <span th:text="${repo.name}">repo-name</span>
+                                </a>
+                            </h5>
+                            <p class="text-muted mb-1" th:text="${repo.description ?: 'Нет описания'}">Нет описания</p>
+                            <div class="mb-2">
+                                <span class="badge badge-secondary mr-2">
+                                    <i class="fas fa-user mr-1"></i>
+                                    <span th:text="${repoOwnerMap[repo.id]}">owner</span>
+                                </span>
+                                <span th:if="${repo.private}" class="badge badge-danger">
+                                    <i class="fas fa-lock mr-1"></i>Private
+                                </span>
+                                <span th:unless="${repo.private}" class="badge badge-success">
+                                    <i class="fas fa-globe-americas mr-1"></i>Public
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted">© 2024 Git Manager</div>
+                <div>
+                    <a href="#" class="mr-3">Terms</a>
+                    <a href="#" class="mr-3">Privacy</a>
+                    <a href="#" class="mr-3">Help</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
