@@ -23,11 +23,20 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
       REPOSITORIES_PATH: ${REPOSITORIES_PATH}
-    ports:
-      - "8080:8080"
     volumes:
       - ./.git-repositories:/app/.git-repositories
     restart: always
+    networks:
+      - my_network
+  nginx:
+    image: nginx:stable-alpine3.23
+    container_name: nginx_proxy
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - my_network
 networks:
