@@ -25,11 +25,14 @@ public class Repo {
     @Column(name = "is_private", nullable = false)
     private boolean isPrivate;
 
-    @OneToMany(mappedBy = "repo")
+    @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Commits> commits;
 
-    @OneToMany(mappedBy = "repo")
+    @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Branch> branches;
+
+    @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Member> members;
     @PrePersist
     protected void onCreate(){
         createdAt = new Date();

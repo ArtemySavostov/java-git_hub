@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import com.savostov.git_manager.model.Repo;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,8 +23,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.nio.file.Files.isDirectory;
 
 @Service
 public class RepositoryService {
@@ -222,12 +219,6 @@ public class RepositoryService {
     }
 
 
-    private boolean isDirectory(Path repoPath, String filePath) {
-        Path fullPath = repoPath.resolve(filePath);
-        return Files.isDirectory(fullPath);
-    }
-
-
     public String getFileContentFromGit(Long repoId, String path) throws IOException, InterruptedException {
         Repo repo = repositoryRepository.getReferenceById(repoId);
         String repositoryPath = repo.getPath();
@@ -242,4 +233,20 @@ public class RepositoryService {
         return repositoryRepository.findReposWhereUserIsCollaboratorNotOwner(userId);
     }
 
+    @Transactional
+    public Repo updateRepository(Long id, String name, String description, boolean isPrivate) {
+        Repo repo = repositoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Repository not found"));
+        repo.setName(name);
+        repo.setDescription(description);
+        repo.setPrivate(isPrivate);
+        return repositoryRepository.save(repo);
+    }
+
+    @Transactional
+    public void deleteRepository(Long id) {
+        if (repositoryRepository.existsById(id)) {
+            repositoryRepository.deleteById(id);
+        }
+    }
 }

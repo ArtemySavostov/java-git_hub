@@ -189,7 +189,8 @@
                                     <span class="text-muted ml-1">Public</span>
                                 </div>
                             </div>
-                            <div class="repo-stats small">
+                            <div class="repo-stats small d-flex justify-content-between align-items-center">
+                                <div>
                                 <span class="mr-3">
                                     <i class="fas fa-circle text-success mr-1"></i>
                                     Active
@@ -202,6 +203,18 @@
                                     <i class="fas fa-code-branch mr-1"></i>
                                     0
                                 </span>
+                                </div>
+                                <div>
+                                    <a th:href="@{/repo/{id}/edit(id=${repo.id})}" class="btn btn-sm btn-outline-primary mr-2">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form th:action="@{/repo/{id}/delete(id=${repo.id})}" method="post" style="display:inline;"
+                                          onsubmit="return confirm('Вы уверены, что хотите удалить репозиторий?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
