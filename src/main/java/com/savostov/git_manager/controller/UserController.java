@@ -51,6 +51,7 @@ public class UserController {
     }
 
 
+
     @GetMapping("/users")
     public String listUsers(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

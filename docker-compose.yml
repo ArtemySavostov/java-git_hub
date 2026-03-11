@@ -5,30 +5,33 @@ services:
     container_name: mysql_db
     restart: always
     environment:
-      MYSQL_DATABASE: java_db
-      MYSQL_ROOT_PASSWORD: arti2002
-    ports:
-      - "3306:3306"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
-
+    networks:
+      - my_network
   app:
     build: .
     container_name: git-manager-app
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/java_db
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: arti2002
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      REPOSITORIES_PATH: /app/.git-repositories
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+      REPOSITORIES_PATH: ${REPOSITORIES_PATH}
     ports:
       - "8080:8080"
     volumes:
       - ./.git-repositories:/app/.git-repositories
     restart: always
-
+    networks:
+      - my_network
+networks:
+  my_network:
+    driver: bridge
 volumes:
   db_data: 
