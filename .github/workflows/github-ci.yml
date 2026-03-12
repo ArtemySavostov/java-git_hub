@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "ci/cd" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -15,108 +15,113 @@ env:
   COVERAGE_MIN: "0.03"
 
 jobs:
-  # build:
-  #   name: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - name: Set up Java
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         distribution: temurin
-  #         java-version: ${{ env.JAVA_VERSION }}
-  #         cache: maven
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
 
-  #     - name: Build (no tests)
-  #       run: ./mvnw -B -DskipTests clean package
+      - name: Build (no tests)
+        run: ./mvnw -B -DskipTests clean package
 
-  # lint:
-  #   name: lint
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - name: Set up Java
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         distribution: temurin
-  #         java-version: ${{ env.JAVA_VERSION }}
-  #         cache: maven
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
 
-  #     - name: Lint
-  #       run: ./mvnw clean checkstyle:check
+      - name: Lint
+        run: ./mvnw clean checkstyle:check
 
-  # test_coverage:
-  #   name: test+coverage
-  #   runs-on: ubuntu-latest
-  #   needs: lint
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+  test_coverage:
+    name: test+coverage
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - name: Set up Java
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         distribution: temurin
-  #         java-version: ${{ env.JAVA_VERSION }}
-  #         cache: maven
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
 
-  #     - name: Run tests with JaCoCo
-  #       run: >
-  #         ./mvnw -B
-  #         org.jacoco:jacoco-maven-plugin:${{ env.JACOCO_VERSION }}:prepare-agent
-  #         test
-  #         org.jacoco:jacoco-maven-plugin:${{ env.JACOCO_VERSION }}:report
+      - name: Run tests with JaCoCo
+        run: >
+          ./mvnw -B
+          org.jacoco:jacoco-maven-plugin:${{ env.JACOCO_VERSION }}:prepare-agent
+          test
+          org.jacoco:jacoco-maven-plugin:${{ env.JACOCO_VERSION }}:report
 
-  #     - name: Enforce coverage threshold
-  #       run: |
-  #         python3 - <<'PY'
-  #         import os
-  #         import xml.etree.ElementTree as ET
+      - name: Enforce coverage threshold
+        run: |
+          python3 - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
 
-  #         xml_path = "target/site/jacoco/jacoco.xml"
-  #         if not os.path.exists(xml_path):
-  #             raise SystemExit(f"JaCoCo report not found: {xml_path}")
+          xml_path = "target/site/jacoco/jacoco.xml"
+          if not os.path.exists(xml_path):
+              raise SystemExit(f"JaCoCo report not found: {xml_path}")
 
-  #         tree = ET.parse(xml_path)
-  #         root = tree.getroot()
+          tree = ET.parse(xml_path)
+          root = tree.getroot()
 
-  #         # Prefer instruction coverage (strongest signal)
-  #         counter = None
-  #         for c in root.findall("counter"):
-  #             if c.get("type") == "INSTRUCTION":
-  #                 counter = c
-  #                 break
-  #         if counter is None:
-  #             raise SystemExit("No INSTRUCTION counter in jacoco.xml")
+          # Prefer instruction coverage (strongest signal)
+          counter = None
+          for c in root.findall("counter"):
+              if c.get("type") == "INSTRUCTION":
+                  counter = c
+                  break
+          if counter is None:
+              raise SystemExit("No INSTRUCTION counter in jacoco.xml")
 
-  #         missed = int(counter.get("missed"))
-  #         covered = int(counter.get("covered"))
-  #         total = missed + covered
-  #         ratio = (covered / total) if total else 1.0
+          missed = int(counter.get("missed"))
+          covered = int(counter.get("covered"))
+          total = missed + covered
+          ratio = (covered / total) if total else 1.0
 
-  #         min_ratio = float(os.environ.get("COVERAGE_MIN", "0.0"))
-  #         print(f"Instruction coverage: {ratio:.2%} (covered={covered}, missed={missed})")
+          min_ratio = float(os.environ.get("COVERAGE_MIN", "0.0"))
+          print(f"Instruction coverage: {ratio:.2%} (covered={covered}, missed={missed})")
 
-  #         if ratio < min_ratio:
-  #             raise SystemExit(f"Coverage {ratio:.2%} is below threshold {min_ratio:.2%}")
-  #         PY
+          if ratio < min_ratio:
+              raise SystemExit(f"Coverage {ratio:.2%} is below threshold {min_ratio:.2%}")
+          PY
 
-  #     - name: Upload JaCoCo HTML report
-  #       if: always()
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: jacoco-report
-  #         path: target/site/jacoco/
-  #         if-no-files-found: warn
+      - name: Upload JaCoCo HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+          if-no-files-found: warn
   build-docker:
     name: build-docker
     runs-on: ubuntu-latest
-    # needs: test_coverage
+    needs: test_coverage
+    paths:
+      - 'Dockerfile'
+      - 'src/**'
+      - 'pom.xml'
+      - 'checkstyle.xml'
     steps:
       - name: Login to Docker Hub
         uses: docker/login-action@v4
