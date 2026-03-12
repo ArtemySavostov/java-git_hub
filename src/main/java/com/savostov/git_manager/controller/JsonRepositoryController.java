@@ -29,6 +29,7 @@ public class JsonRepositoryController {
     private final FileStructureService fileStructureService;
     private final GitService gitService;
     private final RepositoryRepository repositoryRepository;
+    private final int SIZE = 1024;
 
     @Autowired
     public JsonRepositoryController(FileStructureService fileStructureService, 
@@ -64,7 +65,7 @@ public class JsonRepositoryController {
             long fileSize = gitService.getFileSize(repo.getPath(), path);
             
 
-            if (fileSize > 1024 * 1024) {
+            if (fileSize > SIZE * SIZE) {
                 return ResponseEntity.ok(Map.of(
                     "error", true,
                     "message", "Файл слишком большой для просмотра в браузере. Максимальный размер: 1MB",
