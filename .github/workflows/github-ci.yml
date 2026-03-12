@@ -133,12 +133,10 @@ jobs:
       - name: Build and test
         uses: docker/build-push-action@v7
         with:
-          context: .
           load: true
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
-          context: .
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.sha }}
