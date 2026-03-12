@@ -47,8 +47,8 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           cache: maven
 
-      - name: Lint (compile only)
-        run: ./mvnw -B -DskipTests=true -DtrimStackTrace=false validate
+      - name: Lint
+        run: ./mvnw clean checkstyle:check
 
   test_coverage:
     name: test+coverage
