@@ -4,7 +4,6 @@ WORKDIR /app
 COPY pom.xml .
 COPY checkstyle.xml .
 COPY src ./src
-echo "test"
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
