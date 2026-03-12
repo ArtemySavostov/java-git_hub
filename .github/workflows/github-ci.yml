@@ -126,6 +126,9 @@ jobs:
 
       - name: Build Docker image
         uses: docker/setup-buildx-action@v4
+      
+      - name: List files in root
+        run: ls -la
 
       - name: Build and test
         uses: docker/build-push-action@v7
