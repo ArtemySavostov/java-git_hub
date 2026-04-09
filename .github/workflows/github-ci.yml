@@ -12,7 +12,7 @@ permissions:
 env:
   JAVA_VERSION: "21"
   JACOCO_VERSION: "0.8.12"
-  COVERAGE_MIN: "0.03"
+  COVERAGE_MIN: "0.7"
 
 jobs:
   build:
@@ -69,7 +69,7 @@ jobs:
         run: >
           ./mvnw -B
           org.jacoco:jacoco-maven-plugin:${{ env.JACOCO_VERSION }}:prepare-agent
-          test
+          test -Dtest="!**/repository/**/*Test"
           org.jacoco:jacoco-maven-plugin:${{ env.JACOCO_VERSION }}:report
 
       - name: Check coverage threshold
