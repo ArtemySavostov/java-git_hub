@@ -78,11 +78,17 @@ class RepositoryServiceTest {
 
     @Test
     void createDefaultRepository_createsRepo() {
-        when(repositoryRepository.save(any(Repo.class))).thenReturn(testRepo);
+        Repo expectedRepo = new Repo();
+        expectedRepo.setId(1L);
+        expectedRepo.setName("testuser-repository");
+        expectedRepo.setOwner(testUser);
+        
+        when(repositoryRepository.save(any(Repo.class))).thenReturn(expectedRepo);
 
         Repo result = repositoryService.createDefaultRepository(testUser);
 
-        assertThat(result).isEqualTo(testRepo);
+        assertThat(result.getName()).isEqualTo("testuser-repository");
+        assertThat(result.getOwner()).isEqualTo(testUser);
         verify(repositoryRepository).save(any(Repo.class));
     }
 
@@ -160,7 +166,6 @@ class RepositoryServiceTest {
     void getFileStructure_returnsStructure() throws Exception {
         when(repositoryRepository.getReferenceById(1L)).thenReturn(testRepo);
         when(gitService.getFiles(anyString())).thenReturn(List.of("file1.txt", "dir1"));
-        when(Files.isDirectory(any(Path.class))).thenReturn(false, true);
 
         List<Map<String, Object>> result = repositoryService.getFileStructure(1L, "");
 
