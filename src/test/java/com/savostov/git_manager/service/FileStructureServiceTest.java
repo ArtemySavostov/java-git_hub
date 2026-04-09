@@ -2,6 +2,7 @@ package com.savostov.git_manager.service;
 
 import com.savostov.git_manager.model.Repo;
 import com.savostov.git_manager.repository.RepositoryRepository;
+import lombok.experimental.Accessors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

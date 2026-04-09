@@ -34,7 +34,7 @@ public class FileStructureService {
             List<Map<String, Object>> flatList = flatten(rootNode, repoPath, subPath);
             System.out.println("Flattened list size: " + flatList.size());
             return flatList;
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | RuntimeException e) {
             return new ArrayList<>();
         }
     }
