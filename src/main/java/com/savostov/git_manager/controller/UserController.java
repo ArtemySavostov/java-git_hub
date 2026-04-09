@@ -59,7 +59,7 @@ public class UserController {
         List<User> users = userService.findUserByUsernameNot(username);
         User currentUser = userService.getUserByUsername(username).orElse(null);
         Long currentUserId = currentUser != null ? currentUser.getId() : null;
-        List<Long> followingList = userRepository.getFollowingList(currentUser.getId());
+        List<Long> followingList = currentUser != null ? userRepository.getFollowingList(currentUser.getId()) : List.of();
         model.addAttribute("followingUsers", followingList);
         model.addAttribute("users", users);
         model.addAttribute("currentUserId", currentUserId);

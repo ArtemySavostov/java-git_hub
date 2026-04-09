@@ -46,6 +46,24 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>5.2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>5.2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-inline</artifactId>
+			<version>5.2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
@@ -85,11 +103,61 @@
     		<version>13.2.0</version>
     		<scope>provided</scope>
 		</dependency>
+		<!-- JaCoCo Maven Plugin for Code Coverage -->
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.8</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-		<!-- Плагин Checkstyle -->
+		<!-- JaCoCo Maven Plugin Configuration -->
+		<plugin>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.12</version>
+			<configuration>
+				<excludes>
+					<exclude>com/savostov/git_manager/GitManagerApplication.class</exclude>
+				</excludes>
+				<rules>
+					<rule>
+						<element>BUNDLE</element>
+						<limits>
+							<limit>
+								<counter>INSTRUCTION</counter>
+								<value>COVEREDRATIO</value>
+								<minimum>0.85</minimum>
+							</limit>
+						</limits>
+					</rule>
+				</rules>
+			</configuration>
+			<executions>
+				<execution>
+					<id>prepare-agent</id>
+					<goals>
+						<goal>prepare-agent</goal>
+					</goals>
+				</execution>
+				<execution>
+					<id>report</id>
+					<phase>test</phase>
+					<goals>
+						<goal>report</goal>
+					</goals>
+				</execution>
+				<execution>
+					<id>check</id>
+					<goals>
+						<goal>check</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -109,6 +177,21 @@
                     </execution>
                 </executions>
             </plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>3.5.3</version>
+			<configuration>
+				<argLine>
+					--add-opens=java.base/java.lang=ALL-UNNAMED
+					--add-opens=java.base/java.util=ALL-UNNAMED
+					--add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+					--add-opens=java.base/sun.nio.fs=ALL-UNNAMED
+					-Dnet.bytebuddy.experimental=true
+					${argLine}
+				</argLine>
+			</configuration>
+		</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
