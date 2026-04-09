@@ -88,6 +88,7 @@ class MemberServiceTest {
 
     @Test
     void addMemberToRepo_withInvalidRepoId_throwsException() {
+        when(userRepository.findById(2L)).thenReturn(Optional.of(memberUser));
         when(repositoryRepository.findById(999L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> memberService.addMemberToRepo(999L, 2L, "developer"))

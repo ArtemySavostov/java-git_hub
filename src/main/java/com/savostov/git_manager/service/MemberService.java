@@ -25,8 +25,8 @@ public class MemberService {
 
 
     public Member addMemberToRepo(Long repoId, Long userId, String role){
-        Repo repo = repositoryRepository.findById(repoId).orElseThrow(() -> new RuntimeException("Repository not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Repo repo = repositoryRepository.findById(repoId).orElseThrow(() -> new RuntimeException("Repository not found"));
         Member member = new Member();
         member.setRepo(repo);
         member.setUser(user);
