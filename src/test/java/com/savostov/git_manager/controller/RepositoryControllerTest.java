@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -74,9 +75,6 @@ class RepositoryControllerTest {
         testRepo.setName("test-repo");
         testRepo.setPath("/path/to/repo");
         testRepo.setOwner(testUser);
-
-        when(request.getRequestURI()).thenReturn("/repository/1/file/test.txt");
-        when(request.getContextPath()).thenReturn("");
     }
 
     @Test
@@ -111,7 +109,9 @@ class RepositoryControllerTest {
 
     @Test
     void showFiles_withValidRequest_returnsFileView() throws Exception {
+        when(repositoryRepository.findById(1L)).thenReturn(Optional.of(testRepo));
         when(request.getRequestURI()).thenReturn("/repository/1/file/src/test.txt");
+        when(request.getContextPath()).thenReturn("");
         when(gitService.getFileContent("/path/to/repo", "src/test.txt")).thenReturn("file content");
 
         String view = repositoryController.showFiles(1L, request, model);
@@ -125,6 +125,7 @@ class RepositoryControllerTest {
     @Test
     void showFiles_withInvalidRepoId_throwsNotFoundException() {
         when(request.getRequestURI()).thenReturn("/repository/999/file/test.txt");
+        when(request.getContextPath()).thenReturn("");
         when(repositoryRepository.findById(999L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> repositoryController.showFiles(999L, request, model))
@@ -201,8 +202,8 @@ class RepositoryControllerTest {
         String view = repositoryController.getCollaborationsList(model);
 
         assertThat(view).isEqualTo("collaborations_list");
-        verify(model).addAttribute("repos", collaborationList);
-        verify(model).addAttribute("repoOwnerMap", any(Map.class));
+        verify(model).addAttribute(eq("repos"), eq(collaborationList));
+        verify(model).addAttribute(eq("repoOwnerMap"), any(Map.class));
     }
 
     @Test
