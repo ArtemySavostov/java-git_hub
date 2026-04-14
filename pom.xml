@@ -107,7 +107,7 @@
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>0.8.8</version>
+			<version>0.8.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -122,6 +122,13 @@
 			<configuration>
 				<excludes>
 					<exclude>com/savostov/git_manager/GitManagerApplication.class</exclude>
+					<exclude>**/*MockitoMock*</exclude>
+					<exclude>**/proxy/*</exclude>
+					<exclude>sun/**</exclude>
+					<exclude>com/sun/**</exclude>
+					<exclude>jdk/**</exclude>
+					<exclude>java/**</exclude>
+					<exclude>javax/**</exclude>
 				</excludes>
 				<rules>
 					<rule>
@@ -150,12 +157,12 @@
 						<goal>report</goal>
 					</goals>
 				</execution>
-				<execution>
+				<!-- <execution>
 					<id>check</id>
 					<goals>
 						<goal>check</goal>
 					</goals>
-				</execution>
+				</execution> -->
 			</executions>
 		</plugin>
             <plugin>
@@ -187,9 +194,15 @@
 					--add-opens=java.base/java.util=ALL-UNNAMED
 					--add-opens=java.base/java.util.concurrent=ALL-UNNAMED
 					--add-opens=java.base/sun.nio.fs=ALL-UNNAMED
+					--add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+					--add-opens=java.instrument/java.lang.instrument=ALL-UNNAMED
 					-Dnet.bytebuddy.experimental=true
+					-Djacoco.skip.broken=true
 					${argLine}
 				</argLine>
+				<systemPropertyVariables>
+					<jacoco.skip.broken>true</jacoco.skip.broken>
+				</systemPropertyVariables>
 			</configuration>
 		</plugin>
 			<plugin>

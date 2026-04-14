@@ -62,9 +62,6 @@ class HomeControllerTest {
         testRepo.setId(1L);
         testRepo.setName("testrepo");
         testRepo.setOwner(testUser);
-
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
     }
 
     @Test
@@ -121,12 +118,12 @@ class HomeControllerTest {
     void createRepository_withValidUser_createsAndRedirects() {
         when(authentication.getName()).thenReturn("testuser");
         when(userService.getUserByUsername("testuser")).thenReturn(Optional.of(testUser));
-        when(repositoryService.createRepository(testUser, "newrepo", false)).thenReturn(testRepo);
+        when(repositoryService.createRepository(testUser, "testrepo", false)).thenReturn(testRepo);
 
         String view = homeController.createRepository(testRepo);
 
         assertThat(view).isEqualTo("redirect:/home");
-        verify(repositoryService).createRepository(testUser, "newrepo", false);
+        verify(repositoryService).createRepository(testUser, "testrepo", false);
     }
 
     @Test

@@ -68,9 +68,6 @@ class UserControllerTest {
         testRepo = new Repo();
         testRepo.setId(1L);
         testRepo.setName("testrepo");
-
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
     }
 
     @Test

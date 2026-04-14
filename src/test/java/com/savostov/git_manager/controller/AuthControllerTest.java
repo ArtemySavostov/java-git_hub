@@ -17,6 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +40,6 @@ class AuthControllerTest {
 
     @BeforeEach
     void setUp() {
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
     }
 
     @Test
@@ -47,7 +47,7 @@ class AuthControllerTest {
         String view = authController.registerForm(model);
 
         assertThat(view).isEqualTo("register");
-        verify(model).addAttribute("user", any(User.class));
+        verify(model).addAttribute(eq("user"), any(User.class));
     }
 
     @Test

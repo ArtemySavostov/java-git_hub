@@ -79,10 +79,10 @@ public class JsonRepositoryController {
                 "error", false,
                 "content", content
             ));
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                 "error", true,
-                "message", "Ошибка при чтении файла: " + e.getMessage()
+                "message", "Error when reading file: " + e.getMessage()
             ));
         }
     }

@@ -21,17 +21,15 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final RepositoryService repositoryService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RepositoryService repositoryService, UserRepository userRepository) {
         this.userService = userService;
+        this.repositoryService = repositoryService;
+        this.userRepository = userRepository;
     }
-
-    @Autowired
-    private RepositoryService repositoryService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @GetMapping("/user/{id}")
     public String getUserById(@PathVariable Long id, Model model) {
