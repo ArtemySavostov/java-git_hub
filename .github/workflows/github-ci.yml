@@ -72,8 +72,8 @@ jobs:
           test -Dtest="!**/repository/**/*Test,!**/GitServiceTest,!**/AuthControllerTest,!**/HomeControllerTest,!**/UserControllerTest"
           org.jacoco:jacoco-maven-plugin:${{ env.JACOCO_VERSION }}:report
 
-       - name: Check coverage threshold
-         run: ./mvnw jacoco:check -Dtest="!**/repository/**/*Test,!**/GitServiceTest,!**/AuthControllerTest,!**/HomeControllerTest,!**/UserControllerTest" -Djacoco.minimum.coverage=${{ env.COVERAGE_MIN }}
+      - name: Check coverage threshold
+        run: ./mvnw jacoco:check -Dtest="!**/repository/**/*Test,!**/GitServiceTest,!**/AuthControllerTest,!**/HomeControllerTest,!**/UserControllerTest" -Djacoco.minimum.coverage=${{ env.COVERAGE_MIN }}
 
       - name: Upload JaCoCo HTML report
         if: always()
